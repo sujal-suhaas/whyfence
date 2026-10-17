@@ -15,8 +15,11 @@ For analysis input, `runWithInput` delegates `--range` to `input.ParseRange` or
 `--diff` to `input.ParseDiffSource`. A validated range then calls
 `evidence.RecoverLineRange`, which resolves the repository root, runs local
 `git log -L`, parses and de-duplicates full-hash/subject citations, and formats
-the citations. A validated diff still becomes a stable terminal summary. Input
-and evidence failures are deterministic non-zero errors.
+the citations. Each subject is passed to `evidence.ExtractReferences`, which
+recognizes documented explicit issue/PR forms and keeps each reference attached
+to its source commit before the CLI formats it. A validated diff still becomes a
+stable terminal summary. Input and evidence failures are deterministic non-zero
+errors.
 
 ## Planned core flow
 

@@ -7,13 +7,92 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
+	"sort"
+	"strconv"
 	"strings"
 )
 
+// ReferenceKind identifies the kind of tracker object named by a commit subject.
+type ReferenceKind string
+
+const (
+	// IssueReference identifies an issue reference.
+	IssueReference ReferenceKind = "issue"
+	// PullRequestReference identifies a pull request reference.
+	PullRequestReference ReferenceKind = "pr"
+)
+
+// Reference identifies one explicit issue or pull request token in a subject.
+type Reference struct {
+	Kind   ReferenceKind
+	Number int
+	Raw    string
+}
+
 // Citation identifies one local Git commit relevant to a requested line range.
 type Citation struct {
-	Hash    string
-	Subject string
+	Hash       string
+	Subject    string
+	References []Reference
+}
+
+type referencePattern struct {
+	kind    ReferenceKind
+	pattern *regexp.Regexp
+}
+
+var referencePatterns = []referencePattern{
+	{kind: IssueReference, pattern: regexp.MustCompile(`(?i)\bissue\s*(?::\s*|\s+)#([0-9]+)\b`)},
+	{kind: IssueReference, pattern: regexp.MustCompile(`(?i)\bhttps://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/issues/([0-9]+)\b`)},
+	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\b(?:pr|pull request)\s*(?::\s*|\s+)#([0-9]+)\b`)},
+	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\bmerge\s+pull\s+request\s+#([0-9]+)\b`)},
+	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\bhttps://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/([0-9]+)\b`)},
+}
+
+type referenceMatch struct {
+	reference Reference
+	start     int
+}
+
+// ExtractReferences parses supported explicit issue and pull request forms from
+// one local commit subject without querying a remote tracker.
+func ExtractReferences(subject string) []Reference {
+	matches := make([]referenceMatch, 0)
+	for _, referencePattern := range referencePatterns {
+		for _, indexes := range referencePattern.pattern.FindAllStringSubmatchIndex(subject, -1) {
+			if len(indexes) < 4 {
+				continue
+			}
+			number, err := strconv.Atoi(subject[indexes[2]:indexes[3]])
+			if err != nil || number < 1 {
+				continue
+			}
+			matches = append(matches, referenceMatch{
+				reference: Reference{
+					Kind:   referencePattern.kind,
+					Number: number,
+					Raw:    strings.TrimSpace(subject[indexes[0]:indexes[1]]),
+				},
+				start: indexes[0],
+			})
+		}
+	}
+	sort.SliceStable(matches, func(i, j int) bool {
+		return matches[i].start < matches[j].start
+	})
+
+	references := make([]Reference, 0, len(matches))
+	seen := make(map[string]struct{})
+	for _, match := range matches {
+		key := fmt.Sprintf("%s:%d", match.reference.Kind, match.reference.Number)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		references = append(references, match.reference)
+	}
+	return references
 }
 
 // RecoverLineRange traces path's inclusive 1-based line range through local Git
@@ -105,7 +184,11 @@ func parseCitations(output string) []Citation {
 			continue
 		}
 		seen[fields[0]] = struct{}{}
-		citations = append(citations, Citation{Hash: fields[0], Subject: fields[1]})
+		citations = append(citations, Citation{
+			Hash:       fields[0],
+			Subject:    fields[1],
+			References: ExtractReferences(fields[1]),
+		})
 	}
 	return citations
 }

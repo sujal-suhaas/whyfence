@@ -30,17 +30,17 @@ func TestRecoveryAccuracy(t *testing.T) {
 			},
 		},
 		{
-			Name:     "linked issue reference",
-			Expected: "#42",
+			Name:     "commit subject reference",
+			Expected: "PR #42",
 			Resolve: func() (string, error) {
 				subject, err := commitSubject(history.Repository, history.Fix.Hash)
 				if err != nil {
 					return "", err
 				}
-				if !strings.Contains(subject, "#42") {
-					return "", fmt.Errorf("issue reference missing from %q", subject)
+				if !strings.Contains(subject, "PR #42") {
+					return "", fmt.Errorf("PR reference missing from %q", subject)
 				}
-				return "#42", nil
+				return "PR #42", nil
 			},
 		},
 		{
@@ -53,8 +53,16 @@ func TestRecoveryAccuracy(t *testing.T) {
 		{
 			Name: "line-range evidence",
 			Expected: citationSummary([]evidence.Citation{
-				{Hash: history.Fix.Hash, Subject: history.Fix.Subject},
-				{Hash: history.Baseline.Hash, Subject: history.Baseline.Subject},
+				{
+					Hash:       history.Fix.Hash,
+					Subject:    history.Fix.Subject,
+					References: []evidence.Reference{{Kind: evidence.PullRequestReference, Number: 42, Raw: "PR #42"}},
+				},
+				{
+					Hash:       history.Baseline.Hash,
+					Subject:    history.Baseline.Subject,
+					References: []evidence.Reference{{Kind: evidence.IssueReference, Number: 41, Raw: "issue #41"}},
+				},
 			}),
 			Resolve: func() (string, error) {
 				path := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
@@ -63,6 +71,28 @@ func TestRecoveryAccuracy(t *testing.T) {
 					return "", err
 				}
 				return citationSummary(citations), nil
+			},
+		},
+		{
+			Name:     "production issue reference",
+			Expected: "issue #41",
+			Resolve: func() (string, error) {
+				citations, err := lineRangeCitations(history)
+				if err != nil {
+					return "", err
+				}
+				return citationReference(citations, history.Baseline.Hash, evidence.IssueReference, 41)
+			},
+		},
+		{
+			Name:     "production PR reference",
+			Expected: "pr #42",
+			Resolve: func() (string, error) {
+				citations, err := lineRangeCitations(history)
+				if err != nil {
+					return "", err
+				}
+				return citationReference(citations, history.Fix.Hash, evidence.PullRequestReference, 42)
 			},
 		},
 	}
@@ -108,7 +138,30 @@ func changedTestPath(repo fixtures.Repository, hash, expectedPath string) (strin
 func citationSummary(citations []evidence.Citation) string {
 	parts := make([]string, 0, len(citations))
 	for _, citation := range citations {
-		parts = append(parts, citation.Hash+" "+citation.Subject)
+		part := citation.Hash + " " + citation.Subject
+		for _, reference := range citation.References {
+			part += fmt.Sprintf(" [%s #%d]", reference.Kind, reference.Number)
+		}
+		parts = append(parts, part)
 	}
 	return strings.Join(parts, "\n")
+}
+
+func lineRangeCitations(history *fixtures.KnownHistory) ([]evidence.Citation, error) {
+	path := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
+	return evidence.RecoverLineRange(path, 3, 3)
+}
+
+func citationReference(citations []evidence.Citation, hash string, kind evidence.ReferenceKind, number int) (string, error) {
+	for _, citation := range citations {
+		if citation.Hash != hash {
+			continue
+		}
+		for _, reference := range citation.References {
+			if reference.Kind == kind && reference.Number == number {
+				return fmt.Sprintf("%s #%d", reference.Kind, reference.Number), nil
+			}
+		}
+	}
+	return "", fmt.Errorf("reference %s #%d not found on commit %s", kind, number, hash)
 }

@@ -23,6 +23,8 @@
   was deleted.
 - Pulled `main` and reran the full Docker, line-range, and accuracy checks after
   the merge.
+- Started issue #7 on `feat/7-reference-evidence` with explicit local issue/PR
+  extraction attached to originating line-range citations.
 
 ## In progress
 
@@ -30,12 +32,14 @@
 - Issue #4 is merged and verified on `main`.
 - Issue #5 is merged and verified on `main`.
 - Issue #6 is merged and verified on `main`.
+- Issue #7 is implemented and verified in its branch; its commit, PR, merge, and
+  post-merge lifecycle remain in progress under the issue-level GO workflow.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
 ## Next
 
-- After issue #6 is merged and verified, review issue #7's plan before requesting
+- After issue #7 is merged and verified, review issue #8's plan before requesting
   or using its issue-level GO.
 
 ## Gotchas
@@ -107,3 +111,10 @@
   --version` after PR #14 merge: passed; output `whyfence 0.1.0-dev`.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
   after PR #14 merge: passed.
+- Docker-mounted Go 1.23.0 `go test ./... -run
+  'Test(Issue|PR)Reference' -count=1 -v`: passed; issue and PR references were
+  recovered from their originating fixture commits.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestLineRange -count=1 -v` on
+  issue #7: passed with citation references attached.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
+  -v` on issue #7: passed; output `recovered 6 of 6`.

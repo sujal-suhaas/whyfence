@@ -38,4 +38,17 @@ verification, and status.
   `go test ./... -count=1` passed; clean `docker build --no-cache -t
   whyfence:test .` passed; Git, full tests, and the fixture test passed in
   `--network=none` containers.
-- **Status:** Committed on `feat/3-fixture-builder`; PR pending.
+- **Status:** Merged via PR #11 as squash commit `0e83c7e0`.
+
+## Issue #4 — start recovered-N-of-M accuracy harness
+
+- **Goal:** Start a calculated accuracy harness with three known generated-fixture
+  cases and stable `recovered N of M` output.
+- **Approach:** Keep the harness resolver-agnostic; use test-only Git resolvers
+  over generated history until production evidence recovery lands.
+- **Files touched:** `internal/accuracy/`, `docs/Architecture.md`,
+  `docs/Flow.md`, `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker-mounted Go 1.23.0 ran `go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` with `recovered 3 of 3`, and
+  `go test ./... -count=1` passed.
+- **Status:** Implementation ready for review; commit pending approval.

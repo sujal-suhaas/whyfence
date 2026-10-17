@@ -13,6 +13,9 @@ removed or rewritten. The core must be deterministic and offline.
   dependencies.
 - `internal/fixtures/` builds deterministic temporary Git repositories at test
   time for future evidence and accuracy tests.
+- `internal/accuracy/` counts exact expected-reason matches from injected
+  test-time resolvers; it is a verification boundary, not the production
+  evidence collector.
 - `Dockerfile` is the reproducible test boundary; it pins Go and installs Git
   explicitly for the future local-history collector.
 - `.github/workflows/docker-test.yml` builds the image and runs the tests and

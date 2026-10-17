@@ -5,18 +5,20 @@
 - Merged issue #2 through PR #10 as squash commit `73a2f614`.
 - Pulled `main` and verified a clean no-cache Docker rebuild, Git in the image,
   offline container tests, and the offline version flag after the merge.
-- Issue #3 is implemented and pushed on `feat/3-fixture-builder` as `1b5a766`.
+- Issue #3 is implemented in commit `1b5a766` on `feat/3-fixture-builder`.
+- Integrated current `main` into the issue #3 branch without rewriting history
+  in synchronization commit `1157a25`.
 
 ## In progress
 
-- Issue #3 has no PR yet; its branch is still based on the pre-merge issue #2
-  history and must be rebased onto current `main` before PR review.
+- Issue #3 has no PR yet; its branch is synchronized with current `main` and
+  fully verified.
 - Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
   skeleton setup and are intentionally untouched.
 
 ## Next
 
-- Rebase issue #3 onto current `main` and verify its exclusive diff.
+- Verify issue #3's exclusive diff against current `main`.
 - Show the issue #3 diff and wait for explicit approval before opening its PR.
 - After PR checks pass and a second approval, squash-merge issue #3, pull
   `main`, rerun Docker tests, and update this handoff again.
@@ -28,6 +30,8 @@
 - Docker Desktop may need to be started before local Docker verification.
 - The post-merge Docker checks run with `--network=none`; the image build needs
   network access for `apt-get install git`.
+- `docs/Bug.md` and `docs/Decisions.md` remain unrelated unstaged documentation
+  from the prior skeleton setup and are not part of issue #3.
 - The README install section remains intentionally unchanged.
 
 ## Verification
@@ -38,3 +42,8 @@
 - `docker run --rm --network=none whyfence:test go test ./...`: passed.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`:
   passed; output `whyfence 0.1.0-dev`.
+- `docker build --no-cache -t whyfence:test .` on synchronized issue #3 branch:
+  passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1`: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestFixtureBuilder -count=1`: passed after branch synchronization.

@@ -11,6 +11,8 @@ removed or rewritten. The core must be deterministic and offline.
   the `--version` behavior.
 - `cmd/whyfence/main_test.go` protects the version behavior without external
   dependencies.
+- `internal/fixtures/` builds deterministic temporary Git repositories at test
+  time for future evidence and accuracy tests.
 - `Dockerfile` is the reproducible test boundary; it pins Go and installs Git
   explicitly for the future local-history collector.
 - `.github/workflows/docker-test.yml` builds the image and runs the tests and

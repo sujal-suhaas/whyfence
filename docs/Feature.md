@@ -65,4 +65,4 @@ verification, and status.
 - **Verification:** Docker-mounted Go 1.23.0 passed `TestCLIContract`, its
   deterministic error cases, and the full suite; clean Docker build, Git check,
   offline full tests, contract tests, `--version`, and `--help` all passed.
-- **Status:** Implementation ready for review; commit pending approval.
+- **Status:** Merged via PR #13 as squash commit `32ae790d`.

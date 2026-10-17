@@ -13,22 +13,23 @@
   was deleted.
 - Pulled `main` and reran the full Docker, fixture, and accuracy checks after the
   merge.
-- Started issue #5 on `feat/5-cli-contract` with explicit range and diff input
-  modes and deterministic validation errors.
+- Merged issue #5 through PR #13 as squash commit `32ae790d`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker and CLI contract checks after the
+  merge.
 
 ## In progress
 
 - Issues #2 and #3 are merged and verified on `main`.
 - Issue #4 is merged and verified on `main`.
-- Issue #5 is implemented and fully verified; its commit, PR, merge, and
-  post-merge lifecycle are in progress under the issue-level GO workflow.
+- Issue #5 is merged and verified on `main`.
 - Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
   skeleton setup and are intentionally untouched.
 
 ## Next
 
-- Commit and push issue #5, open and merge its PR, then pull `main`, rerun Docker,
-  and update this handoff.
+- Continue with issue #6 only after reviewing its plan and receiving an issue-level
+  GO.
 
 ## Gotchas
 
@@ -73,3 +74,11 @@
   TestCLIContract -count=1 -v`: passed.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`:
   passed; input flags were listed.
+- `git pull --ff-only origin main`: passed after PR #13 merge.
+- `docker build --no-cache -t whyfence:test .` after PR #13 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
+  PR #13 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestCLIContract -count=1 -v` after PR #13 merge: passed.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
+  after PR #13 merge: passed.

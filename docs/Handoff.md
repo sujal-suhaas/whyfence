@@ -5,23 +5,21 @@
 - Merged issue #2 through PR #10 as squash commit `73a2f614`.
 - Pulled `main` and verified a clean no-cache Docker rebuild, Git in the image,
   offline container tests, and the offline version flag after the merge.
-- Issue #3 is implemented in commit `1b5a766` on `feat/3-fixture-builder`.
-- Integrated current `main` into the issue #3 branch without rewriting history
-  in synchronization commit `1157a25`.
+- Merged issue #3 through PR #11 as squash commit `0e83c7e0`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker and offline fixture checks after the
+  merge.
 
 ## In progress
 
-- Issue #3 has no PR yet; its branch is synchronized with current `main` and
-  fully verified.
+- Issues #2 and #3 are merged and verified on `main`.
 - Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
   skeleton setup and are intentionally untouched.
 
 ## Next
 
-- Verify issue #3's exclusive diff against current `main`.
-- Show the issue #3 diff and wait for explicit approval before opening its PR.
-- After PR checks pass and a second approval, squash-merge issue #3, pull
-  `main`, rerun Docker tests, and update this handoff again.
+- Continue with issue #4 only after reviewing its plan and receiving explicit
+  approval.
 
 ## Gotchas
 
@@ -42,8 +40,8 @@
 - `docker run --rm --network=none whyfence:test go test ./...`: passed.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`:
   passed; output `whyfence 0.1.0-dev`.
-- `docker build --no-cache -t whyfence:test .` on synchronized issue #3 branch:
-  passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1`: passed.
+- `docker build --no-cache -t whyfence:test .` after PR #11 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
+  PR #11 merge: passed.
 - `docker run --rm --network=none whyfence:test go test ./... -run
-  TestFixtureBuilder -count=1`: passed after branch synchronization.
+  TestFixtureBuilder -count=1` after PR #11 merge: passed.

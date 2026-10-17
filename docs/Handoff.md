@@ -19,14 +19,17 @@
   merge.
 - Started issue #6 on `feat/6-line-range-evidence` with production Git
   line-range recovery, cited commit output, and an accuracy case.
+- Merged issue #6 through PR #14 as squash commit `b1abebc8`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker, line-range, and accuracy checks after
+  the merge.
 
 ## In progress
 
 - Issues #2 and #3 are merged and verified on `main`.
 - Issue #4 is merged and verified on `main`.
 - Issue #5 is merged and verified on `main`.
-- Issue #6 is implemented and verified in its branch; its commit, PR, merge, and
-  post-merge lifecycle remain in progress under the issue-level GO workflow.
+- Issue #6 is merged and verified on `main`.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
@@ -91,3 +94,16 @@
   non-repository and invalid-boundary inputs deterministically.
 - Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
   -v`: passed; output `recovered 4 of 4`.
+- `git pull --ff-only origin main`: passed after PR #14 merge.
+- `docker build --no-cache -t whyfence:test .` after PR #14 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
+  PR #14 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestLineRange -count=1 -v` after PR #14 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` after PR #14 merge: passed; output
+  `recovered 4 of 4`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --version` after PR #14 merge: passed; output `whyfence 0.1.0-dev`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
+  after PR #14 merge: passed.

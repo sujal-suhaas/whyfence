@@ -79,5 +79,5 @@ verification, and status.
   `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
 - **Verification:** Docker-mounted Go 1.23.0 passed `TestLineRange` and
   `TestRecoveryAccuracy` with `recovered 4 of 4`; full-suite and offline Docker
-  checks remain required before merge.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+  checks passed before and after merge.
+- **Status:** Merged via PR #14 as squash commit `b1abebc8`.

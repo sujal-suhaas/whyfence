@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/sujal-suhaas/whyfence/internal/input"
 )
 
 const version = "0.1.0-dev"
@@ -14,16 +17,40 @@ func main() {
 }
 
 func run(args []string, stdout, stderr io.Writer) int {
+	return runWithInput(args, os.Stdin, stdout, stderr)
+}
+
+func runWithInput(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	flags := flag.NewFlagSet("whyfence", flag.ContinueOnError)
 	flags.SetOutput(stderr)
 	showVersion := flags.Bool("version", false, "print the whyfence version")
+	rangeSpec := flags.String("range", "", "an inclusive file range: path:start-end")
+	diffSource := flags.String("diff", "", "a unified diff file, or - for stdin")
 	if err := flags.Parse(args); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			return 0
+		}
 		return 2
 	}
 	if *showVersion {
 		fmt.Fprintf(stdout, "whyfence %s\n", version)
 		return 0
 	}
-	flags.Usage()
+	if (*rangeSpec == "") == (*diffSource == "") {
+		fmt.Fprintln(stderr, "input: exactly one of --range or --diff is required")
+		return 2
+	}
+	var request input.Request
+	var err error
+	if *rangeSpec != "" {
+		request, err = input.ParseRange(*rangeSpec, os.ReadFile)
+	} else {
+		request, err = input.ParseDiffSource(*diffSource, os.ReadFile, stdin)
+	}
+	if err != nil {
+		fmt.Fprintln(stderr, err)
+		return 2
+	}
+	fmt.Fprintln(stdout, request.Summary())
 	return 0
 }

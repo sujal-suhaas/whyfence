@@ -11,6 +11,10 @@ result with its known reason, and reports the calculated recovered count. Docker
 builds the module, runs `go test ./...`, and CI repeats the checks with
 networking disabled.
 
+For analysis input, `runWithInput` delegates `--range` to `input.ParseRange` or
+`--diff` to `input.ParseDiffSource`; the validated request becomes a stable
+terminal summary or a deterministic `input:` error.
+
 ## Planned core flow
 
 CLI entry point → input/range or diff parser → local Git evidence collector →

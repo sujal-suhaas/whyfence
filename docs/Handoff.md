@@ -31,6 +31,10 @@
   the merge.
 - Started issue #8 on `feat/8-changed-tests` with root-safe same-commit test-path
   recovery, matching/non-matching fixtures, and CLI test citations.
+- Merged issue #8 through PR #16 as squash commit `aba23165`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker, changed-test, and accuracy checks after
+  the merge.
 
 ## In progress
 
@@ -39,8 +43,7 @@
 - Issue #5 is merged and verified on `main`.
 - Issue #6 is merged and verified on `main`.
 - Issue #7 is merged and verified on `main`.
-- Issue #8 is implemented and verified in its branch; its commit, PR, merge, and
-  post-merge lifecycle remain in progress under the issue-level GO workflow.
+- Issue #8 is merged and verified on `main`.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
@@ -147,3 +150,16 @@
   issue #8: passed with same-commit test paths attached to citations.
 - Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
   -v` on issue #8: passed; output `recovered 7 of 7`.
+- `git pull --ff-only origin main`: passed after PR #16 merge.
+- `docker build --no-cache -t whyfence:test .` after PR #16 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
+  PR #16 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestChangedTests -count=1 -v` after PR #16 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` after PR #16 merge: passed; output
+  `recovered 7 of 7`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --version` after PR #16 merge: passed; output `whyfence 0.1.0-dev`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
+  after PR #16 merge: passed.

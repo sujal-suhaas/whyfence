@@ -112,5 +112,5 @@ verification, and status.
   `docs/Flow.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
 - **Verification:** Docker-mounted Go 1.23.0 passed `TestChangedTests`,
   `TestLineRange`, and `TestRecoveryAccuracy` with `recovered 7 of 7`; full-suite
-  and offline Docker checks remain required before merge.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+  and offline Docker checks passed before and after merge.
+- **Status:** Merged via PR #16 as squash commit `aba23165`.

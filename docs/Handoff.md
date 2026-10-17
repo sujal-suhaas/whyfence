@@ -6,12 +6,13 @@
 - Pulled `main` and verified a clean no-cache Docker rebuild, Git in the image,
   offline container tests, and the offline version flag after the merge.
 - Issue #3 is implemented in commit `1b5a766` on `feat/3-fixture-builder`.
-- Integrated current `main` into the issue #3 branch without rewriting history.
+- Integrated current `main` into the issue #3 branch without rewriting history
+  in synchronization commit `1157a25`.
 
 ## In progress
 
-- Issue #3 has no PR yet; its branch is being verified after synchronization
-  with current `main`.
+- Issue #3 has no PR yet; its branch is synchronized with current `main` and
+  fully verified.
 - Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
   skeleton setup and are intentionally untouched.
 
@@ -41,5 +42,8 @@
 - `docker run --rm --network=none whyfence:test go test ./...`: passed.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`:
   passed; output `whyfence 0.1.0-dev`.
-- `go test ./... -run TestFixtureBuilder -count=1`: passed before branch sync;
-  rerun after conflict resolution.
+- `docker build --no-cache -t whyfence:test .` on synchronized issue #3 branch:
+  passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1`: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestFixtureBuilder -count=1`: passed after branch synchronization.

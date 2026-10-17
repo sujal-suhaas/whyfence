@@ -25,6 +25,10 @@
   the merge.
 - Started issue #7 on `feat/7-reference-evidence` with explicit local issue/PR
   extraction attached to originating line-range citations.
+- Merged issue #7 through PR #15 as squash commit `6bf4cc84`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker, reference, and accuracy checks after
+  the merge.
 
 ## In progress
 
@@ -32,8 +36,7 @@
 - Issue #4 is merged and verified on `main`.
 - Issue #5 is merged and verified on `main`.
 - Issue #6 is merged and verified on `main`.
-- Issue #7 is implemented and verified in its branch; its commit, PR, merge, and
-  post-merge lifecycle remain in progress under the issue-level GO workflow.
+- Issue #7 is merged and verified on `main`.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
@@ -118,3 +121,18 @@
   issue #7: passed with citation references attached.
 - Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
   -v` on issue #7: passed; output `recovered 6 of 6`.
+- `git pull --ff-only origin main`: passed after PR #15 merge.
+- `docker build --no-cache -t whyfence:test .` after PR #15 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
+  PR #15 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestIssueReference -count=1 -v` after PR #15 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestPRReference -count=1 -v` after PR #15 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` after PR #15 merge: passed; output
+  `recovered 6 of 6`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --version` after PR #15 merge: passed; output `whyfence 0.1.0-dev`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
+  after PR #15 merge: passed.

@@ -9,6 +9,7 @@ type KnownHistory struct {
 	TestPath   string
 	Baseline   Commit
 	Fix        Commit
+	CodeOnly   Commit
 }
 
 // NewKnownHistory creates target code and a regression test in separate commits.
@@ -44,6 +45,19 @@ func NewKnownHistory() (*KnownHistory, error) {
 		return nil, err
 	}
 	history.Fix, err = repo.Commit("Fix timeout handling (PR #42)", time.Date(2024, 2, 3, 4, 5, 6, 0, time.UTC))
+	if err != nil {
+		_ = repo.Cleanup()
+		return nil, err
+	}
+	if err := repo.WriteFile(history.TargetPath, "package internal\n\nfunc timeoutSeconds() int { return 90 }\n"); err != nil {
+		_ = repo.Cleanup()
+		return nil, err
+	}
+	if err := repo.WriteFile("internal/worker_helper.go", "package internal\n\nfunc timeoutLabel() string { return \"timeout\" }\n"); err != nil {
+		_ = repo.Cleanup()
+		return nil, err
+	}
+	history.CodeOnly, err = repo.Commit("Tune timeout without test", time.Date(2024, 3, 4, 5, 6, 7, 0, time.UTC))
 	if err != nil {
 		_ = repo.Cleanup()
 		return nil, err

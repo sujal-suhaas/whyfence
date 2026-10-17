@@ -17,9 +17,11 @@ For analysis input, `runWithInput` delegates `--range` to `input.ParseRange` or
 `git log -L`, parses and de-duplicates full-hash/subject citations, and formats
 the citations. Each subject is passed to `evidence.ExtractReferences`, which
 recognizes documented explicit issue/PR forms and keeps each reference attached
-to its source commit before the CLI formats it. A validated diff still becomes a
-stable terminal summary. Input and evidence failures are deterministic non-zero
-errors.
+to its source commit before the CLI formats it. The collector then runs a
+root-safe local `git diff-tree` query for each recovered commit, filters changed
+paths whose basenames end in `_test.go`, sorts those repository-relative paths,
+and attaches them to the same citation. A validated diff still becomes a stable
+terminal summary. Input and evidence failures are deterministic non-zero errors.
 
 ## Planned core flow
 

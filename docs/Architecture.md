@@ -12,7 +12,8 @@ removed or rewritten. The core must be deterministic and offline.
 - `cmd/whyfence/main_test.go` protects the version behavior without external
   dependencies.
 - `internal/fixtures/` builds deterministic temporary Git repositories at test
-  time for future evidence and accuracy tests.
+  time for evidence and accuracy tests, including matching and non-matching test
+  changes.
 - `internal/accuracy/` counts exact expected-reason matches from injected
   test-time resolvers and production line-range recovery; it remains a
   verification boundary, not the evidence collector.
@@ -20,11 +21,11 @@ removed or rewritten. The core must be deterministic and offline.
   before later evidence collection.
 - `internal/evidence/` invokes local Git's line-range history traversal,
   parses full-hash/subject citations, and extracts explicit issue/PR references
-  without network or LLM dependencies. References stay attached to their
-  originating citations.
+  without network or LLM dependencies. References and same-commit changed test
+  paths stay attached to their originating citations.
 - `cmd/whyfence/main.go` sends validated ranges through `internal/evidence/` and
-  prints stable commit citations and their references; diff input remains at the
-  input-summary stage until its evidence slice is implemented.
+  prints stable commit citations, changed test paths, and references; diff input
+  remains at the input-summary stage until its evidence slice is implemented.
 - `Dockerfile` is the reproducible test boundary; it pins Go and installs Git
   explicitly for the future local-history collector.
 - `.github/workflows/docker-test.yml` builds the image and runs the tests and

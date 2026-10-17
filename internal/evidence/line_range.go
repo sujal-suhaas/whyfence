@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -35,6 +36,7 @@ type Citation struct {
 	Hash       string
 	Subject    string
 	References []Reference
+	TestPaths  []string
 }
 
 type referencePattern struct {
@@ -81,6 +83,9 @@ func ExtractReferences(subject string) []Reference {
 	sort.SliceStable(matches, func(i, j int) bool {
 		return matches[i].start < matches[j].start
 	})
+	if len(matches) == 0 {
+		return nil
+	}
 
 	references := make([]Reference, 0, len(matches))
 	seen := make(map[string]struct{})
@@ -146,7 +151,44 @@ func RecoverLineRange(path string, start, end int) ([]Citation, error) {
 	if len(citations) == 0 {
 		return nil, fmt.Errorf("evidence: no Git commits found for %s:%d-%d", relPath, start, end)
 	}
+	for index := range citations {
+		citations[index].TestPaths, err = changedTestPaths(repoRoot, citations[index].Hash)
+		if err != nil {
+			return nil, err
+		}
+	}
 	return citations, nil
+}
+
+func changedTestPaths(repoRoot, hash string) ([]string, error) {
+	command := exec.Command("git", "--no-pager", "-C", repoRoot, "diff-tree", "--root", "--no-commit-id", "--name-only", "--no-renames", "-r", "-z", hash)
+	command.Env = append(os.Environ(),
+		"GIT_CONFIG_NOSYSTEM=1",
+		"GIT_TERMINAL_PROMPT=0",
+		"LC_ALL=C",
+		"LANG=C",
+	)
+	output, err := command.CombinedOutput()
+	if err != nil {
+		message := strings.TrimSpace(string(output))
+		if message == "" {
+			message = err.Error()
+		}
+		return nil, fmt.Errorf("evidence: Git changed-path recovery failed for %s: %s", hash, message)
+	}
+
+	var testPaths []string
+	for _, changedPath := range strings.Split(strings.TrimSuffix(string(output), "\x00"), "\x00") {
+		if isTestPath(changedPath) {
+			testPaths = append(testPaths, changedPath)
+		}
+	}
+	sort.Strings(testPaths)
+	return testPaths, nil
+}
+
+func isTestPath(repoPath string) bool {
+	return repoPath != "" && strings.HasSuffix(path.Base(repoPath), "_test.go")
 }
 
 func findRepositoryRoot(directory string) (string, error) {

@@ -9,22 +9,22 @@
   was deleted.
 - Pulled `main` and reran the full Docker and offline fixture checks after the
   merge.
-- Started issue #4 on `feat/4-accuracy-harness` with a calculated harness and
-  three generated-fixture cases.
+- Merged issue #4 through PR #12 as squash commit `bddf6615`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker, fixture, and accuracy checks after the
+  merge.
 
 ## In progress
 
 - Issues #2 and #3 are merged and verified on `main`.
-- Issue #4 is implemented and verified in Docker; it is awaiting diff approval
-  before commit and push.
+- Issue #4 is merged and verified on `main`.
 - Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
   skeleton setup and are intentionally untouched.
 
 ## Next
 
-- Show the issue #4 diff and wait for explicit approval before committing.
-- After approval, commit and push `feat/4-accuracy-harness` and open its PR only
-  after reviewing the exclusive diff.
+- Continue with issue #5 only after reviewing its plan and receiving explicit
+  approval.
 
 ## Gotchas
 
@@ -53,3 +53,11 @@
 - Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
   -v`: passed; output `recovered 3 of 3`.
 - Docker-mounted Go 1.23.0 `go test ./... -count=1`: passed.
+- `docker build --no-cache -t whyfence:test .` after PR #12 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
+  PR #12 merge: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` after PR #12 merge: passed; output
+  `recovered 3 of 3`.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --version` after PR #12 merge: passed; output `whyfence 0.1.0-dev`.

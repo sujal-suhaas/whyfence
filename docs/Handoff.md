@@ -29,6 +29,8 @@
   was deleted.
 - Pulled `main` and reran the full Docker, reference, and accuracy checks after
   the merge.
+- Started issue #8 on `feat/8-changed-tests` with root-safe same-commit test-path
+  recovery, matching/non-matching fixtures, and CLI test citations.
 
 ## In progress
 
@@ -37,12 +39,14 @@
 - Issue #5 is merged and verified on `main`.
 - Issue #6 is merged and verified on `main`.
 - Issue #7 is merged and verified on `main`.
+- Issue #8 is implemented and verified in its branch; its commit, PR, merge, and
+  post-merge lifecycle remain in progress under the issue-level GO workflow.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
 ## Next
 
-- After issue #7 is merged and verified, review issue #8's plan before requesting
+- After issue #8 is merged and verified, review issue #9's plan before requesting
   or using its issue-level GO.
 
 ## Gotchas
@@ -136,3 +140,10 @@
   --version` after PR #15 merge: passed; output `whyfence 0.1.0-dev`.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
   after PR #15 merge: passed.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestChangedTests -count=1 -v`:
+  passed; matching `_test.go` paths, root-commit paths, and code-only changes
+  were classified deterministically.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestLineRange -count=1 -v` on
+  issue #8: passed with same-commit test paths attached to citations.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
+  -v` on issue #8: passed; output `recovered 7 of 7`.

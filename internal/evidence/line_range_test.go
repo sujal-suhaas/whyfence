@@ -15,14 +15,21 @@ func TestLineRange(t *testing.T) {
 	path := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
 	want := []Citation{
 		{
+			Hash:      history.CodeOnly.Hash,
+			Subject:   history.CodeOnly.Subject,
+			TestPaths: nil,
+		},
+		{
 			Hash:       history.Fix.Hash,
 			Subject:    history.Fix.Subject,
 			References: []Reference{{Kind: PullRequestReference, Number: 42, Raw: "PR #42"}},
+			TestPaths:  []string{history.TestPath},
 		},
 		{
 			Hash:       history.Baseline.Hash,
 			Subject:    history.Baseline.Subject,
 			References: []Reference{{Kind: IssueReference, Number: 41, Raw: "issue #41"}},
+			TestPaths:  []string{history.TestPath},
 		},
 	}
 	got, err := RecoverLineRange(path, 3, 3)
@@ -39,6 +46,33 @@ func TestLineRange(t *testing.T) {
 	}
 	if !reflect.DeepEqual(repeated, got) {
 		t.Fatalf("repeated citations = %#v, want %#v", repeated, got)
+	}
+}
+
+func TestChangedTests(t *testing.T) {
+	history := knownHistory(t)
+	path := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
+	citations, err := RecoverLineRange(path, 3, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if got := citationByHash(citations, history.Fix.Hash).TestPaths; !reflect.DeepEqual(got, []string{history.TestPath}) {
+		t.Fatalf("matching test paths = %#v, want %#v", got, []string{history.TestPath})
+	}
+	if got := citationByHash(citations, history.Baseline.Hash).TestPaths; !reflect.DeepEqual(got, []string{history.TestPath}) {
+		t.Fatalf("root-commit test paths = %#v, want %#v", got, []string{history.TestPath})
+	}
+	if got := citationByHash(citations, history.CodeOnly.Hash).TestPaths; len(got) != 0 {
+		t.Fatalf("non-matching test paths = %#v, want none", got)
+	}
+
+	repeated, err := RecoverLineRange(path, 3, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(repeated, citations) {
+		t.Fatalf("repeated changed-test evidence = %#v, want %#v", repeated, citations)
 	}
 }
 

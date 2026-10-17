@@ -97,3 +97,20 @@ verification, and status.
   `recovered 6 of 6`; full-suite and offline Docker checks passed before and
   after merge.
 - **Status:** Merged via PR #15 as squash commit `6bf4cc84`.
+
+## Issue #8 — detect tests changed alongside code
+
+- **Goal:** Identify test files changed in the same commits as recovered target
+  code and preserve those test citations.
+- **Approach:** Query each recovered commit with root-safe local `git diff-tree`,
+  classify only repository-relative basenames ending in `_test.go`, sort paths,
+  attach them to the originating citation, and render `test:` lines in range
+  output. The fixture includes matching test changes and a code-only
+  non-matching change.
+- **Files touched:** `cmd/whyfence/`, `internal/evidence/`,
+  `internal/fixtures/`, `internal/accuracy/`, `docs/Architecture.md`,
+  `docs/Flow.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker-mounted Go 1.23.0 passed `TestChangedTests`,
+  `TestLineRange`, and `TestRecoveryAccuracy` with `recovered 7 of 7`; full-suite
+  and offline Docker checks remain required before merge.
+- **Status:** Implementation ready for review; PR lifecycle pending.

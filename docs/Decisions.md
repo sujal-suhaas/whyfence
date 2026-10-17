@@ -150,3 +150,26 @@ prevents a repeated number from losing the commit that mentioned it.
 **Rejected alternatives:** Treating every `#number` as an issue or PR was
 rejected because it would make a false classification. Querying GitHub was
 rejected because offline, local-git-only execution is a hard constraint.
+
+## 2026-10-17 — identify changed tests by same-commit `_test.go` paths
+
+**Context:** Issue #8 needs related test evidence for each commit recovered from
+a target line range. The relationship must be local, deterministic, and
+auditable without inferring imports or querying a code host.
+
+**Decision:** For every recovered commit, run `git diff-tree --root --name-only
+--no-renames -r -z`, keep repository-relative paths whose basename ends in
+`_test.go`, sort them lexically, and attach them to that commit's `Citation` as
+`TestPaths`. A root commit is treated the same as any other commit. An empty
+list means that commit changed no recognized test path.
+
+**Why:** The same-commit rule is directly observable in local Git history, the
+Go `_test.go` suffix is unambiguous for this repository, `--root` covers the
+fixture's initial commit, and sorted slash-separated paths make output stable.
+Disabling rename detection avoids reporting heuristic rename pairs as new test
+evidence in this first slice.
+
+**Rejected alternatives:** Directory names such as `tests/`, test data files,
+and language-neutral conventions were rejected because they would broaden an
+underspecified policy beyond the current Go project. A naïve parent-to-commit
+diff was rejected because it misses root-commit changes.

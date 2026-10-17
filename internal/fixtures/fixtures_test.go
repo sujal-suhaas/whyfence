@@ -57,8 +57,8 @@ func TestFixtureBuilder(t *testing.T) {
 		t.Fatal(err)
 	}
 	lines := strings.Split(strings.TrimSpace(logOutput), "\n")
-	if len(lines) != 2 {
-		t.Fatalf("fixture commit count = %d, want 2; log = %q", len(lines), logOutput)
+	if len(lines) != 3 {
+		t.Fatalf("fixture commit count = %d, want 3; log = %q", len(lines), logOutput)
 	}
 	for _, line := range lines {
 		fields := strings.Split(line, "\t")
@@ -69,7 +69,7 @@ func TestFixtureBuilder(t *testing.T) {
 			t.Fatalf("unexpected fixed identity in %q", line)
 		}
 	}
-	if !strings.Contains(logOutput, "Fix timeout handling (PR #42)") || !strings.Contains(logOutput, "Add worker timeout guard for issue #41") {
+	if !strings.Contains(logOutput, "Tune timeout without test") || !strings.Contains(logOutput, "Fix timeout handling (PR #42)") || !strings.Contains(logOutput, "Add worker timeout guard for issue #41") {
 		t.Fatalf("known history subjects missing from log: %q", logOutput)
 	}
 	if !strings.Contains(logOutput, history.Fix.When.Format("2006-01-02T15:04:05")) {

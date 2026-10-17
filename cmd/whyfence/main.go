@@ -61,6 +61,9 @@ func runWithInput(args []string, stdin io.Reader, stdout, stderr io.Writer) int 
 		fmt.Fprintf(stdout, "input: range\nfile: %s\nlines: %d-%d\n", request.Path, request.Start, request.End)
 		for _, citation := range citations {
 			fmt.Fprintf(stdout, "commit: %s %s\n", citation.Hash, citation.Subject)
+			for _, testPath := range citation.TestPaths {
+				fmt.Fprintf(stdout, "test: %s\n", testPath)
+			}
 			for _, reference := range citation.References {
 				fmt.Fprintf(stdout, "reference: %s #%d\n", reference.Kind, reference.Number)
 			}

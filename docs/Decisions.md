@@ -76,3 +76,22 @@ scope decision instead of repeating approval for mechanical Git transitions.
 **Rejected alternative:** Separate approval at every lifecycle stage was
 rejected as redundant once the issue scope and acceptance criteria were already
 approved.
+
+## 2026-10-17 — use explicit range and diff input modes
+
+**Context:** The CLI needs a deterministic contract before evidence recovery is
+implemented. Ambiguous positional input or automatic format detection would
+make invalid-input behavior and tests harder to reproduce.
+
+**Decision:** Accept exactly one explicit input mode: `--range path:start-end`
+for an inclusive 1-based file range, or `--diff path` for a unified diff file;
+`--diff -` reads the diff from stdin. Validate paths, line bounds, non-empty
+input, and unified-diff headers/hunks before producing a stable summary.
+
+**Why:** Explicit modes make the user contract visible in `--help`, give every
+failure a deterministic `input:` error, and leave the production evidence
+collector independent from input parsing.
+
+**Rejected alternatives:** Positional arguments and auto-detecting whether a
+single string is a path, range, or diff were rejected because they create
+ambiguous parsing and platform-sensitive error behavior.

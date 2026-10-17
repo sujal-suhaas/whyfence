@@ -13,18 +13,22 @@
   was deleted.
 - Pulled `main` and reran the full Docker, fixture, and accuracy checks after the
   merge.
+- Started issue #5 on `feat/5-cli-contract` with explicit range and diff input
+  modes and deterministic validation errors.
 
 ## In progress
 
 - Issues #2 and #3 are merged and verified on `main`.
 - Issue #4 is merged and verified on `main`.
+- Issue #5 is implemented and fully verified; its commit, PR, merge, and
+  post-merge lifecycle are in progress under the issue-level GO workflow.
 - Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
   skeleton setup and are intentionally untouched.
 
 ## Next
 
-- Continue with issue #5 only after reviewing its plan and receiving explicit
-  approval.
+- Commit and push issue #5, open and merge its PR, then pull `main`, rerun Docker,
+  and update this handoff.
 
 ## Gotchas
 
@@ -61,3 +65,11 @@
   `recovered 3 of 3`.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
   --version` after PR #12 merge: passed; output `whyfence 0.1.0-dev`.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestCLIContract -count=1 -v`:
+  passed, including range, diff-file, diff-stdin, and deterministic errors.
+- `docker build --no-cache -t whyfence:test .` on issue #5: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -count=1`: passed.
+- `docker run --rm --network=none whyfence:test go test ./... -run
+  TestCLIContract -count=1 -v`: passed.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`:
+  passed; input flags were listed.

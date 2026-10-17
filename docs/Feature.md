@@ -51,4 +51,18 @@ verification, and status.
 - **Verification:** Docker-mounted Go 1.23.0 ran `go test ./... -run
   TestRecoveryAccuracy -count=1 -v` with `recovered 3 of 3`, and
   `go test ./... -count=1` passed.
+- **Status:** Merged via PR #12 as squash commit `bddf6615`.
+
+## Issue #5 — define deterministic CLI contract
+
+- **Goal:** Accept file ranges or unified diffs and emit stable terminal output
+  with deterministic non-zero errors for invalid input.
+- **Approach:** Use explicit `--range path:start-end` and `--diff path`/`-`
+  modes; validate the input in `internal/input` before formatting a summary.
+- **Files touched:** `cmd/whyfence/`, `internal/input/`,
+  `docs/Architecture.md`, `docs/Flow.md`, `docs/Decisions.md`,
+  `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker-mounted Go 1.23.0 passed `TestCLIContract`, its
+  deterministic error cases, and the full suite; clean Docker build, Git check,
+  offline full tests, contract tests, `--version`, and `--help` all passed.
 - **Status:** Implementation ready for review; commit pending approval.

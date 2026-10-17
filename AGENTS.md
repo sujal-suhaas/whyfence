@@ -45,10 +45,10 @@ Stretch, including any “paste a GitHub link” feature, requires explicit appr
    include problem/goal, cause/approach, files touched, verification, status.
 6. For every change, record a test checklist with the exact command and actual
    result, plus a rollback plan: which commit to revert and other impact.
-7. Show every diff and wait for explicit OK before committing. Commit after each
-   working step, but only after explicit user approval.
-8. At each session end, write `docs/Handoff.md`: done, in progress, next, and
-   gotchas.
+7. For each issue approved with `GO`, show/report every diff and actual checks;
+   commit/push, open PR, wait for checks, squash-merge/delete the branch, pull
+   `main`, rerun Docker, and update `Handoff.md`. Pause only if blocked.
+8. At session end, write `docs/Handoff.md`: done, in progress, next, gotchas.
 9. If behind at the 19 Oct checkpoint, cut in this order: landing page, then
    HTML report; never cut the core or its tests.
 
@@ -62,8 +62,7 @@ Stretch, including any “paste a GitHub link” feature, requires explicit appr
 - Keep commits small and descriptive, and reference the issue number.
 - Open one PR per issue, not per commit. Its body must include why, what changed,
   a test checklist with real evidence, a rollback plan, and `Closes #n`.
-- Show the diff and wait for explicit OK before opening a PR and again before
-  merging. Squash-merge with a descriptive issue-referencing message, then
-  delete the branch.
+- A `GO` for an issue authorizes its full lifecycle; preserve the diff/evidence
+  review, then open and squash-merge its PR after required checks pass.
 - After each merge, pull `main`, rerun the Docker tests, and update `Handoff.md`.
 - Never force-push `main` or rewrite history.

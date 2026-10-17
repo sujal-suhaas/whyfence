@@ -7,6 +7,7 @@ RUN apt-get update \
 WORKDIR /src
 COPY go.mod ./
 COPY cmd ./cmd
+COPY internal ./internal
 
 RUN go test ./...
 

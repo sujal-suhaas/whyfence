@@ -24,3 +24,18 @@ verification, and status.
   passed; container Git check, `docker run --rm --network=none whyfence:test go
   test ./...`, and offline `--version` check all passed.
 - **Status:** Committed on `feat/2-pin-go-toolchain`; PR and CI review pending.
+
+## Issue #3 — build temporary Git fixtures
+
+- **Goal:** Generate deterministic temporary fixture repositories with fixed
+  authors and dates at test time.
+- **Approach:** Use a standard-library Go helper to run `git init` in a system
+  temp directory, configure a fixed identity, create known target/test history,
+  and clean the repository after each test.
+- **Files touched:** `internal/fixtures/`, `Dockerfile`,
+  `docs/Architecture.md`, `docs/Flow.md`, `docs/Feature.md`.
+- **Verification:** `go test ./... -run TestFixtureBuilder -count=1` and
+  `go test ./... -count=1` passed; clean `docker build --no-cache -t
+  whyfence:test .` passed; Git, full tests, and the fixture test passed in
+  `--network=none` containers.
+- **Status:** Implementation ready for review; commit pending approval.

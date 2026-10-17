@@ -69,7 +69,7 @@ func TestFixtureBuilder(t *testing.T) {
 			t.Fatalf("unexpected fixed identity in %q", line)
 		}
 	}
-	if !strings.Contains(logOutput, "Fix timeout handling (#42)") || !strings.Contains(logOutput, "Add worker timeout guard") {
+	if !strings.Contains(logOutput, "Fix timeout handling (PR #42)") || !strings.Contains(logOutput, "Add worker timeout guard for issue #41") {
 		t.Fatalf("known history subjects missing from log: %q", logOutput)
 	}
 	if !strings.Contains(logOutput, history.Fix.When.Format("2006-01-02T15:04:05")) {

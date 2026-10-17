@@ -51,7 +51,7 @@ func TestCLIContract(t *testing.T) {
 		if exitCode := run([]string{"--range", file + ":1-3"}, &stdout, &stderr); exitCode != 0 {
 			t.Fatalf("range exit code = %d, stderr = %q", exitCode, stderr.String())
 		}
-		want := fmt.Sprintf("input: range\nfile: %s\nlines: 1-3\ncommit: %s %s\ncommit: %s %s\nstatus: accepted\n", file, history.Fix.Hash, history.Fix.Subject, history.Baseline.Hash, history.Baseline.Subject)
+		want := fmt.Sprintf("input: range\nfile: %s\nlines: 1-3\ncommit: %s %s\nreference: pr #42\ncommit: %s %s\nreference: issue #41\nstatus: accepted\n", file, history.Fix.Hash, history.Fix.Subject, history.Baseline.Hash, history.Baseline.Subject)
 		if stdout.String() != want {
 			t.Fatalf("range output = %q, want %q", stdout.String(), want)
 		}

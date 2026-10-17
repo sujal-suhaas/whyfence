@@ -124,3 +124,29 @@ network, dependency, and heuristic variability.
 **Rejected alternative:** `git blame` was rejected because a latest-owner-only
 answer would miss the baseline commit in the known two-commit history and would
 not satisfy the range-recovery goal.
+
+## 2026-10-17 — classify only explicit local issue and PR references
+
+**Context:** Issue #7 needs tracker references from local commit messages while
+the deterministic core remains offline and cannot ask GitHub whether a number is
+an issue or a pull request.
+
+**Supported forms:**
+
+- Issues: `issue #41`, `issue: #41`, and GitHub `/issues/41` URLs.
+- Pull requests: `PR #42`, `PR: #42`, `pull request #42`, generated `Merge pull
+  request #42 from ...` subjects, and GitHub `/pull/42` URLs.
+
+**Decision:** Parse commit subjects only because the line-range collector already
+retrieves `%s`. Return references in first-appearance order, de-duplicate the
+same kind/number within one citation, and preserve each reference on its source
+commit. Ignore bare `#42` and `owner/repo#42` because they are ambiguous without
+remote metadata.
+
+**Why:** Explicit wording or a URL path supplies enough local information to
+classify the reference without network access. Keeping provenance on `Citation`
+prevents a repeated number from losing the commit that mentioned it.
+
+**Rejected alternatives:** Treating every `#number` as an issue or PR was
+rejected because it would make a false classification. Querying GitHub was
+rejected because offline, local-git-only execution is a hard constraint.

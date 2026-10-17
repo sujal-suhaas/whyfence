@@ -18,11 +18,13 @@ removed or rewritten. The core must be deterministic and offline.
   verification boundary, not the evidence collector.
 - `internal/input/` validates the file-range and unified-diff input contract
   before later evidence collection.
-- `internal/evidence/` invokes local Git's line-range history traversal and
-  parses full-hash/subject citations without network or LLM dependencies.
+- `internal/evidence/` invokes local Git's line-range history traversal,
+  parses full-hash/subject citations, and extracts explicit issue/PR references
+  without network or LLM dependencies. References stay attached to their
+  originating citations.
 - `cmd/whyfence/main.go` sends validated ranges through `internal/evidence/` and
-  prints stable commit citations; diff input remains at the input-summary stage
-  until its evidence slice is implemented.
+  prints stable commit citations and their references; diff input remains at the
+  input-summary stage until its evidence slice is implemented.
 - `Dockerfile` is the reproducible test boundary; it pins Go and installs Git
   explicitly for the future local-history collector.
 - `.github/workflows/docker-test.yml` builds the image and runs the tests and

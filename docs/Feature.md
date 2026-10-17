@@ -81,3 +81,19 @@ verification, and status.
   `TestRecoveryAccuracy` with `recovered 4 of 4`; full-suite and offline Docker
   checks passed before and after merge.
 - **Status:** Merged via PR #14 as squash commit `b1abebc8`.
+
+## Issue #7 — extract local issue and PR references
+
+- **Goal:** Surface deterministic issue and pull request references from local
+  commit subjects without using the GitHub API.
+- **Approach:** Extend line-range citations with provenance-preserving
+  references; parse explicit issue, PR, merge-subject, and GitHub URL forms while
+  intentionally leaving ambiguous bare `#number` tokens unresolved.
+- **Files touched:** `cmd/whyfence/`, `internal/evidence/`,
+  `internal/fixtures/`, `internal/accuracy/`, `docs/Architecture.md`,
+  `docs/Flow.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker-mounted Go 1.23.0 passed `TestIssueReference`,
+  `TestPRReference`, `TestLineRange`, and `TestRecoveryAccuracy` with
+  `recovered 6 of 6`; full-suite and offline Docker checks remain required before
+  merge.
+- **Status:** Implementation ready for review; PR lifecycle pending.

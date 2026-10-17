@@ -30,7 +30,7 @@ func NewKnownHistory() (*KnownHistory, error) {
 		_ = repo.Cleanup()
 		return nil, err
 	}
-	history.Baseline, err = repo.Commit("Add worker timeout guard", time.Date(2024, 1, 2, 3, 4, 5, 0, time.UTC))
+	history.Baseline, err = repo.Commit("Add worker timeout guard for issue #41", time.Date(2024, 1, 2, 3, 4, 5, 0, time.UTC))
 	if err != nil {
 		_ = repo.Cleanup()
 		return nil, err
@@ -43,7 +43,7 @@ func NewKnownHistory() (*KnownHistory, error) {
 		_ = repo.Cleanup()
 		return nil, err
 	}
-	history.Fix, err = repo.Commit("Fix timeout handling (#42)", time.Date(2024, 2, 3, 4, 5, 6, 0, time.UTC))
+	history.Fix, err = repo.Commit("Fix timeout handling (PR #42)", time.Date(2024, 2, 3, 4, 5, 6, 0, time.UTC))
 	if err != nil {
 		_ = repo.Cleanup()
 		return nil, err

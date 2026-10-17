@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/sujal-suhaas/whyfence/internal/evidence"
 	"github.com/sujal-suhaas/whyfence/internal/input"
 )
 
@@ -50,6 +51,19 @@ func runWithInput(args []string, stdin io.Reader, stdout, stderr io.Writer) int 
 	if err != nil {
 		fmt.Fprintln(stderr, err)
 		return 2
+	}
+	if request.Mode == input.RangeMode {
+		citations, err := evidence.RecoverLineRange(request.Path, request.Start, request.End)
+		if err != nil {
+			fmt.Fprintln(stderr, err)
+			return 2
+		}
+		fmt.Fprintf(stdout, "input: range\nfile: %s\nlines: %d-%d\n", request.Path, request.Start, request.End)
+		for _, citation := range citations {
+			fmt.Fprintf(stdout, "commit: %s %s\n", citation.Hash, citation.Subject)
+		}
+		fmt.Fprintln(stdout, "status: accepted")
+		return 0
 	}
 	fmt.Fprintln(stdout, request.Summary())
 	return 0

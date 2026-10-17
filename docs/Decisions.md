@@ -95,3 +95,32 @@ collector independent from input parsing.
 **Rejected alternatives:** Positional arguments and auto-detecting whether a
 single string is a path, range, or diff were rejected because they create
 ambiguous parsing and platform-sensitive error behavior.
+
+## 2026-10-17 — trace ranges with Git line history
+
+**Context:** Issue #6 needs to recover local commits that explain a targeted
+line range, with full-hash and subject citations that remain reproducible in
+offline tests.
+
+**Options considered:**
+
+- **`git log -L`:** follows the selected lines through their local history and
+  returns the commits in Git's stable newest-to-oldest order.
+- **`git blame`:** identifies only the latest commit associated with the current
+  lines and does not recover the range's evolution.
+- **Patch parsing:** would duplicate Git's line-tracking behavior and create a
+  larger, less trustworthy implementation surface.
+
+**Decision:** Invoke `git log -L` with `--format=%H%x09%s`, parse the first tab
+as the citation boundary, preserve Git's order, and de-duplicate hashes. Resolve
+the repository from the requested file path so the CLI works with both absolute
+and current-working-directory-relative paths. Keep the collector local-only and
+return deterministic `evidence:` errors for unsupported paths or histories.
+
+**Why:** Git already owns the difficult line-history traversal; using its full
+object hash and subject gives each result a direct citation while avoiding
+network, dependency, and heuristic variability.
+
+**Rejected alternative:** `git blame` was rejected because a latest-owner-only
+answer would miss the baseline commit in the known two-commit history and would
+not satisfy the range-recovery goal.

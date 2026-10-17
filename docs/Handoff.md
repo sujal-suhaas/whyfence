@@ -17,19 +17,23 @@
   was deleted.
 - Pulled `main` and reran the full Docker and CLI contract checks after the
   merge.
+- Started issue #6 on `feat/6-line-range-evidence` with production Git
+  line-range recovery, cited commit output, and an accuracy case.
 
 ## In progress
 
 - Issues #2 and #3 are merged and verified on `main`.
 - Issue #4 is merged and verified on `main`.
 - Issue #5 is merged and verified on `main`.
-- Untracked `docs/Bug.md` and `docs/Decisions.md` remain from the documentation
-  skeleton setup and are intentionally untouched.
+- Issue #6 is implemented and verified in its branch; its commit, PR, merge, and
+  post-merge lifecycle remain in progress under the issue-level GO workflow.
+- Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
+  intentionally untouched.
 
 ## Next
 
-- Continue with issue #6 only after reviewing its plan and receiving an issue-level
-  GO.
+- After issue #6 is merged and verified, review issue #7's plan before requesting
+  or using its issue-level GO.
 
 ## Gotchas
 
@@ -38,8 +42,8 @@
 - Docker Desktop may need to be started before local Docker verification.
 - The post-merge Docker checks run with `--network=none`; the image build needs
   network access for `apt-get install git`.
-- `docs/Bug.md` and `docs/Decisions.md` remain unrelated unstaged documentation
-  from the prior skeleton setup and are not part of issue #3.
+- `docs/Bug.md` remains unrelated untracked documentation from the prior
+  skeleton setup and is not part of issue #6.
 - The README install section remains intentionally unchanged.
 
 ## Verification
@@ -82,3 +86,8 @@
   TestCLIContract -count=1 -v` after PR #13 merge: passed.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
   after PR #13 merge: passed.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestLineRange -count=1 -v`:
+  passed; the production collector recovered both known commits and rejected
+  non-repository and invalid-boundary inputs deterministically.
+- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
+  -v`: passed; output `recovered 4 of 4`.

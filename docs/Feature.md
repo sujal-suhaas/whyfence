@@ -66,3 +66,18 @@ verification, and status.
   deterministic error cases, and the full suite; clean Docker build, Git check,
   offline full tests, contract tests, `--version`, and `--help` all passed.
 - **Status:** Merged via PR #13 as squash commit `32ae790d`.
+
+## Issue #6 — recover line-range evidence
+
+- **Goal:** Trace a targeted file range through local Git history and emit
+  citations containing commit hashes and subjects.
+- **Approach:** Resolve the file's Git repository, run deterministic
+  `git log -L`, parse and de-duplicate full-hash/subject records, and wire the
+  range path into the CLI while leaving diff evidence for its own issue slice.
+- **Files touched:** `cmd/whyfence/`, `internal/evidence/`,
+  `internal/accuracy/`, `docs/Architecture.md`, `docs/Flow.md`,
+  `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker-mounted Go 1.23.0 passed `TestLineRange` and
+  `TestRecoveryAccuracy` with `recovered 4 of 4`; full-suite and offline Docker
+  checks remain required before merge.
+- **Status:** Implementation ready for review; PR lifecycle pending.

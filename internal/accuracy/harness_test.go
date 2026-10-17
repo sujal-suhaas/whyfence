@@ -2,9 +2,11 @@ package accuracy
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/sujal-suhaas/whyfence/internal/evidence"
 	"github.com/sujal-suhaas/whyfence/internal/fixtures"
 )
 
@@ -19,8 +21,6 @@ func TestRecoveryAccuracy(t *testing.T) {
 		}
 	})
 
-	// These adapters exercise generated Git facts while the production evidence
-	// collector is still being built in later issue slices.
 	cases := []Case{
 		{
 			Name:     "baseline target reason",
@@ -48,6 +48,21 @@ func TestRecoveryAccuracy(t *testing.T) {
 			Expected: history.TestPath,
 			Resolve: func() (string, error) {
 				return changedTestPath(history.Repository, history.Fix.Hash, history.TestPath)
+			},
+		},
+		{
+			Name: "line-range evidence",
+			Expected: citationSummary([]evidence.Citation{
+				{Hash: history.Fix.Hash, Subject: history.Fix.Subject},
+				{Hash: history.Baseline.Hash, Subject: history.Baseline.Subject},
+			}),
+			Resolve: func() (string, error) {
+				path := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
+				citations, err := evidence.RecoverLineRange(path, 3, 3)
+				if err != nil {
+					return "", err
+				}
+				return citationSummary(citations), nil
 			},
 		},
 	}
@@ -88,4 +103,12 @@ func changedTestPath(repo fixtures.Repository, hash, expectedPath string) (strin
 		}
 	}
 	return "", fmt.Errorf("changed test %q not found in %q", expectedPath, output)
+}
+
+func citationSummary(citations []evidence.Citation) string {
+	parts := make([]string, 0, len(citations))
+	for _, citation := range citations {
+		parts = append(parts, citation.Hash+" "+citation.Subject)
+	}
+	return strings.Join(parts, "\n")
 }

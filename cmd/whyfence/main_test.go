@@ -2,10 +2,13 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/sujal-suhaas/whyfence/internal/fixtures"
 )
 
 func TestVersionFlag(t *testing.T) {
@@ -32,17 +35,23 @@ func TestHelpFlag(t *testing.T) {
 }
 
 func TestCLIContract(t *testing.T) {
-	file := filepath.Join(t.TempDir(), "worker.go")
-	if err := os.WriteFile(file, []byte("package worker\n\nfunc Run() {}\n"), 0o644); err != nil {
+	history, err := fixtures.NewKnownHistory()
+	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(func() {
+		if err := history.Repository.Cleanup(); err != nil {
+			t.Errorf("cleanup CLI fixture: %v", err)
+		}
+	})
+	file := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
 
 	t.Run("accepts file range", func(t *testing.T) {
 		var stdout, stderr bytes.Buffer
 		if exitCode := run([]string{"--range", file + ":1-3"}, &stdout, &stderr); exitCode != 0 {
 			t.Fatalf("range exit code = %d, stderr = %q", exitCode, stderr.String())
 		}
-		want := "input: range\nfile: " + file + "\nlines: 1-3\nstatus: accepted\n"
+		want := fmt.Sprintf("input: range\nfile: %s\nlines: 1-3\ncommit: %s %s\ncommit: %s %s\nstatus: accepted\n", file, history.Fix.Hash, history.Fix.Subject, history.Baseline.Hash, history.Baseline.Subject)
 		if stdout.String() != want {
 			t.Fatalf("range output = %q, want %q", stdout.String(), want)
 		}

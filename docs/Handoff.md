@@ -2,38 +2,37 @@
 
 ## Done
 
-- Added the bootstrap files: `AGENTS.md`, `README.md`, `LICENSE`, `.gitignore`,
-  and `.env.example`.
-- Initialized local Git on `main` and committed `54cc4fa`:
-  `chore: bootstrap whyfence (#1)`.
-- Created the public repository at
-  `https://github.com/sujal-suhaas/whyfence` and pushed `main`.
-- Created and closed GitHub issue #1 after its bootstrap criteria were met.
+- Added issue #2 on `feat/2-pin-go-toolchain`: pinned Go 1.23.0, a minimal
+  `--version` CLI, one smoke test, a Git-installing Dockerfile, and offline
+  Docker test workflow.
+- Verified host Go tests, a clean no-cache Docker rebuild, Git in the image,
+  offline container tests, and the offline version flag.
+- Updated the architecture, flow, and feature records for issue #2.
 
 ## In progress
 
-- The CLI core has not been implemented yet.
-- No runtime, install command, offline test command, Docker rebuild, HTML
-  report, or `site/` landing page exists yet.
+- Issue #2 is ready to commit and push; no PR has been opened yet.
+- Issue #3 is open for deterministic temporary Git fixtures.
 
 ## Next
 
-- Choose and pin the implementation runtime without documenting an unpublished
-  package.
-- Create the initial architecture and execution-flow documentation before the
-  first code change.
-- Implement and test the CLI core before starting later deliverables.
+- Commit and push issue #2, then open its PR only after reviewing the diff.
+- Implement issue #3 on `feat/3-fixture-builder` after explicit approval.
 
 ## Gotchas
 
-- The README intentionally reports that setup, run, test, and deploy commands
-  are not available yet; do not claim the CLI is runnable until those commands
-  exist and pass from a clean environment.
-- The working tree was clean and `main` tracked `origin/main` after the push.
+- Docker builds need network access for `apt-get install git`; test containers
+  run with `--network=none`.
+- The sandbox Docker daemon uses the `vfs` storage driver.
+- `docs/Bug.md` and `docs/Decisions.md` remain unrelated unstaged documentation
+  from the prior skeleton setup; do not include them in the issue #2 commit.
+- The README install section remains intentionally unchanged.
 
 ## Verification
 
-- `python` bootstrap validation: passed.
-- `git push -u origin main`: passed.
-- `gh repo view sujal-suhaas/whyfence`: confirmed public repository with default
-  branch `main`.
+- `go test ./...`: passed.
+- `docker build --no-cache -t whyfence:test .`: passed.
+- `docker run --rm --network=none whyfence:test git --version`: passed.
+- `docker run --rm --network=none whyfence:test go test ./...`: passed.
+- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`:
+  passed; output `whyfence 0.1.0-dev`.

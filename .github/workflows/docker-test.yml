@@ -1,0 +1,26 @@
+name: Docker test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docker-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build test image
+        run: docker build --no-cache -t whyfence:test .
+
+      - name: Verify Git is installed
+        run: docker run --rm --network=none whyfence:test git --version
+
+      - name: Run offline tests
+        run: docker run --rm --network=none whyfence:test go test ./...
+
+      - name: Verify version flag
+        run: docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version

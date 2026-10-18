@@ -41,6 +41,8 @@
   was deleted.
 - Pulled `main` and reran the post-merge Docker build, full suite, risk tests,
   accuracy, and CLI contract checks.
+- Started issue #18 on `feat/18-static-html-report` for deterministic standalone
+  HTML report output.
 
 ## In progress
 
@@ -50,15 +52,15 @@
 - Issue #6 is merged and verified on `main`.
 - Issue #7 is merged and verified on `main`.
 - Issue #8 is merged and verified on `main`.
-- Issue #9 is merged and verified on `main`; the post-merge version/help smoke
-  rerun is blocked by the local Docker/sandbox runtime described below.
-- Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
-  intentionally untouched.
+- Issue #9 is merged and verified on `main`.
+- Issue #18 is in progress under the issue-level GO workflow.
+- The worktree was clean at the start of issue #18; no unrelated changes are
+  included in this feature.
 
 ## Next
 
-- After issue #9 is merged and verified, review the next approved issue before
-  requesting or using another issue-level GO.
+- After issue #18 is merged and verified, review the next approved deliverable
+  before requesting or using another issue-level GO.
 
 ## Gotchas
 
@@ -67,17 +69,11 @@
 - Docker Desktop may need to be started before local Docker verification.
 - The post-merge Docker checks run with `--network=none`; the image build needs
   network access for `apt-get install git`.
-- `docs/Bug.md` remains unrelated untracked documentation from the prior
-  skeleton setup and is not part of issue #9.
-- The README install section remains intentionally unchanged.
+- README now documents the tested Go/Docker setup and report commands.
 
-- Docker daemon was restarted locally before issue #9 verification because the
-  socket was unavailable; the project image and all offline checks then passed.
-- After the post-merge full checks passed, isolated `go run --version` and
-  `go run --help` containers failed with Go SIGBUS errors, followed by the local
-  shell returning `fork/exec /bin/bash: input/output error`. The pre-merge
-  version/help checks passed; retry these two smoke checks when the sandbox
-  runtime recovers before treating the handoff as fully closed.
+- Docker daemon was restarted locally during issue #9 verification because the
+  socket was unavailable; subsequent post-merge build, tests, version, and help
+  checks passed.
 
 ## Verification
 

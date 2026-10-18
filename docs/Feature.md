@@ -152,3 +152,22 @@ verification, and status.
   `git diff --check`; the same report, full-suite, accuracy, version, and help
   checks passed after merge.
 - **Status:** Merged via PR #19 as squash commit `bad17659`.
+
+## Issue #20 — build the static GitHub Pages landing page
+
+- **Goal:** Publish a plain static project landing page with an accurate CLI
+  explanation, terminal demo, tested setup section, and offline report gallery.
+- **Approach:** Keep HTML and CSS local in `site/`, avoid runtime JavaScript or
+  CDN dependencies, add five CLI-generated standalone report snapshots, record
+  each source repository/commit/range/license in `site/reports/sources.md`, and
+  upload `site/` directly through a no-build GitHub Pages workflow.
+- **Files touched:** `site/index.html`, `site/styles.css`, `site/demo/terminal.txt`,
+  `site/reports/*.html`, `site/reports/sources.md`, `.github/workflows/pages.yml`,
+  `README.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Static Python smoke check passed with five standalone reports
+  and twenty local landing-page links; Docker-mounted Go 1.23.0 passed
+  `go test ./... -count=1` and the documented `go run ... --report` demo;
+  `git diff --check` passed.
+- **Rollback:** Revert the issue #20 feature commit; the CLI, report renderer,
+  tests, and Docker boundary remain intact.
+- **Status:** Implementation ready for review; PR lifecycle pending.

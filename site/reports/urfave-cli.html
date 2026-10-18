@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>whyfence evidence report</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f5f7fb; color: #172033; }
+    body { margin: 0; padding: 2rem; }
+    main { max-width: 72rem; margin: 0 auto; }
+    header, section, footer { background: #fff; border: 1px solid #dbe2ee; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 0.25rem 1rem rgba(23, 32, 51, 0.05); }
+    header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 0; font-size: 1.6rem; }
+    h2 { font-size: 1.1rem; }
+    .eyebrow { color: #52627a; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .status, .risk { border-radius: 999px; display: inline-block; font-size: 0.78rem; font-weight: 700; padding: 0.35rem 0.7rem; text-transform: uppercase; }
+    .status { background: #e8f5ed; color: #17633a; }
+    .risk-low { background: #e8f5ed; color: #17633a; }
+    .risk-medium { background: #fff3d6; color: #815b00; }
+    .risk-high { background: #fde8e8; color: #a32121; }
+    dl { display: grid; gap: 0.7rem; grid-template-columns: 10rem 1fr; margin: 0; }
+    dt { color: #52627a; font-weight: 700; }
+    dd { margin: 0; overflow-wrap: anywhere; }
+    code { background: #eef2f8; border-radius: 0.3rem; padding: 0.12rem 0.3rem; }
+    ol { display: grid; gap: 1rem; padding-left: 1.4rem; }
+    li { padding-left: 0.3rem; }
+    .commit { font-weight: 700; overflow-wrap: anywhere; }
+    .subject { font-weight: 400; }
+    .evidence { color: #52627a; font-size: 0.92rem; margin: 0.5rem 0 0; }
+    .evidence ul { margin: 0.35rem 0 0; }
+    .notice { color: #52627a; margin-bottom: 0; }
+    footer { color: #52627a; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">whyfence</p>
+        <h1>Evidence report</h1>
+      </div>
+      <span class="status">accepted</span>
+    </header>
+
+    <section aria-labelledby="input-heading">
+      <h2 id="input-heading">Input</h2>
+      <dl>
+        <dt>Mode</dt><dd><code>range</code></dd>
+
+        <dt>File</dt><dd><code>cli.go</code></dd>
+        <dt>Lines</dt><dd><code>1-18</code></dd>
+
+
+        <dt>Risk</dt><dd><span class="risk risk-medium">medium</span></dd>
+
+      </dl>
+    </section>
+
+
+    <section aria-labelledby="evidence-heading">
+      <h2 id="evidence-heading">Recovered evidence</h2>
+      <ol>
+
+        <li>
+          <div class="commit"><code>f0abc8245b94fd76e26361681ae8f9ffb9df7fd7</code> <span class="subject">Fixing more tests and panics</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>app_test.go</code></li><li><code>flag_bool_with_inverse_test.go</code></li><li><code>help_test.go</code></li><li><code>suggestions_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>ade5edbb7f9f6b00b47eac0ad507431547761ad0</code> <span class="subject">Use goimports as formatting standard</span></div>
+
+
+        </li>
+
+        <li>
+          <div class="commit"><code>2da290b8729fdc4d6060a40885eef219766ed53f</code> <span class="subject">Ensure indentation is consistent in example code</span></div>
+
+
+        </li>
+
+        <li>
+          <div class="commit"><code>a61867e5e6a107e80cc047d60956f78beddb9ae4</code> <span class="subject">Merge remote-tracking branch &#39;origin/v1&#39; into merging-from-v1</span></div>
+
+
+        </li>
+
+        <li>
+          <div class="commit"><code>a6dd54e94bbb0c70ec72a144d24e24e2247b3b2e</code> <span class="subject">make the basic example build-able.</span></div>
+
+
+        </li>
+
+        <li>
+          <div class="commit"><code>df685fbacce5932609474568d4ae352b9e996355</code> <span class="subject">Remove `NewApp` initializer</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>altsrc/yaml_command_test.go</code></li><li><code>app_test.go</code></li><li><code>command_test.go</code></li><li><code>help_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>fed78b8bab633ee554cfa229e9975ae731d40f5d</code> <span class="subject">Rework of hidden flag impl plus some Action func corrections</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>altsrc/yaml_command_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>ed1ee94250bba1aff2a14d93056f074fd2135af5</code> <span class="subject">Adding some docs</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>app_test.go</code></li><li><code>cli_test.go</code></li><li><code>command_test.go</code></li><li><code>helpers_test.go</code></li></ul></div>
+
+        </li>
+
+      </ol>
+    </section>
+
+
+    <footer>Status: accepted</footer>
+  </main>
+</body>
+</html>

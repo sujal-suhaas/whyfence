@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>whyfence evidence report</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f5f7fb; color: #172033; }
+    body { margin: 0; padding: 2rem; }
+    main { max-width: 72rem; margin: 0 auto; }
+    header, section, footer { background: #fff; border: 1px solid #dbe2ee; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 0.25rem 1rem rgba(23, 32, 51, 0.05); }
+    header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 0; font-size: 1.6rem; }
+    h2 { font-size: 1.1rem; }
+    .eyebrow { color: #52627a; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .status, .risk { border-radius: 999px; display: inline-block; font-size: 0.78rem; font-weight: 700; padding: 0.35rem 0.7rem; text-transform: uppercase; }
+    .status { background: #e8f5ed; color: #17633a; }
+    .risk-low { background: #e8f5ed; color: #17633a; }
+    .risk-medium { background: #fff3d6; color: #815b00; }
+    .risk-high { background: #fde8e8; color: #a32121; }
+    dl { display: grid; gap: 0.7rem; grid-template-columns: 10rem 1fr; margin: 0; }
+    dt { color: #52627a; font-weight: 700; }
+    dd { margin: 0; overflow-wrap: anywhere; }
+    code { background: #eef2f8; border-radius: 0.3rem; padding: 0.12rem 0.3rem; }
+    ol { display: grid; gap: 1rem; padding-left: 1.4rem; }
+    li { padding-left: 0.3rem; }
+    .commit { font-weight: 700; overflow-wrap: anywhere; }
+    .subject { font-weight: 400; }
+    .evidence { color: #52627a; font-size: 0.92rem; margin: 0.5rem 0 0; }
+    .evidence ul { margin: 0.35rem 0 0; }
+    .notice { color: #52627a; margin-bottom: 0; }
+    footer { color: #52627a; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">whyfence</p>
+        <h1>Evidence report</h1>
+      </div>
+      <span class="status">accepted</span>
+    </header>
+
+    <section aria-labelledby="input-heading">
+      <h2 id="input-heading">Input</h2>
+      <dl>
+        <dt>Mode</dt><dd><code>range</code></dd>
+
+        <dt>File</dt><dd><code>logger.go</code></dd>
+        <dt>Lines</dt><dd><code>12-18</code></dd>
+
+
+        <dt>Risk</dt><dd><span class="risk risk-medium">medium</span></dd>
+
+      </dl>
+    </section>
+
+
+    <section aria-labelledby="evidence-heading">
+      <h2 id="evidence-heading">Recovered evidence</h2>
+      <ol>
+
+        <li>
+          <div class="commit"><code>0adb1ac2eaf83713bf8e26317a08460c711da366</code> <span class="subject">refactor: run go fix ./...</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>example_function_test.go</code></li><li><code>example_hook_test.go</code></li><li><code>hook_test.go</code></li><li><code>hooks/syslog/syslog_test.go</code></li><li><code>hooks/test/test_test.go</code></li><li><code>json_formatter_test.go</code></li><li><code>logger_test.go</code></li><li><code>logrus_test.go</code></li><li><code>text_formatter_test.go</code></li><li><code>writer_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>ac6e35b4c213b54a2086b831179b9c324f519695</code> <span class="subject">fix for entry data field race condition</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>entry_test.go</code></li><li><code>logger_test.go</code></li><li><code>logrus_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>7d248fa1b145f2d5aea8d147c6eea99fc0461db7</code> <span class="subject">Add loggers that take functions as input</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>example_function_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>d02c5b387e40564c1197e8cff46e5c7255cd083b</code> <span class="subject">docs: add documentation for godoc</span></div>
+
+
+        </li>
+
+        <li>
+          <div class="commit"><code>53371e36641339bc393fe4e2d1fcf25d84bd0208</code> <span class="subject">Add features from README</span></div>
+          <div class="evidence"><strong>Tests changed</strong><ul><li><code>examples_test.go</code></li><li><code>logrus_test.go</code></li></ul></div>
+
+        </li>
+
+        <li>
+          <div class="commit"><code>6c895096e850ba3210087d435d3867a0d4c4a68f</code> <span class="subject">split into multiple files</span></div>
+
+
+        </li>
+
+      </ol>
+    </section>
+
+
+    <footer>Status: accepted</footer>
+  </main>
+</body>
+</html>

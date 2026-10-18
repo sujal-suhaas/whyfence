@@ -1,0 +1,16 @@
+whyfence terminal demo
+=======================
+
+Run this from the root of a clean whyfence checkout:
+
+  $ go run ./cmd/whyfence --range cmd/whyfence/main.go:26-32 --report report.html
+  report: report.html
+  status: accepted
+
+The named file is a complete HTML document. Open it locally; the report does
+not need a server, API key, browser extension, or network connection.
+
+For a reproducible Docker check:
+
+  $ docker build --no-cache -t whyfence:test .
+  $ docker run --rm --network=none whyfence:test go test ./... -count=1

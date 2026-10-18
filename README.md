@@ -10,9 +10,9 @@ optional and disabled in tests.
 
 ## Project status
 
-The offline CLI core and self-contained static HTML report are implemented and
-tested. The GitHub Pages landing page is still a later deliverable. No package is
-published; use the Go toolchain or Docker commands below.
+The offline CLI core, self-contained static HTML report, and plain GitHub Pages
+landing page are implemented and tested. No package is published; use the Go
+toolchain or Docker commands below.
 
 The planned deliverables are intentionally ordered:
 
@@ -82,9 +82,19 @@ docker run --rm --network=none whyfence:test go test ./... -count=1
 
 ## Deploy
 
-There is no deployment target yet. The generated `.html` report is a standalone
-artifact that can be opened locally or uploaded to a static host. The `site/`
-landing page is planned as the next deliverable.
+The generated `.html` report is a standalone artifact that can be opened locally
+or uploaded to a static host. The checked-in `site/` landing page is published
+by `.github/workflows/pages.yml` without a build step.
+
+To enable GitHub Pages for a fork or another copy of the repository:
+
+1. Push `main` and open **Settings → Pages**.
+2. Select **GitHub Actions** as the build and deployment source.
+3. Push a subsequent change to `main`, or run **Deploy static site** from the
+   repository's Actions tab.
+
+The workflow uploads only `site/`; the Go CLI and Docker test image do not run
+as part of the Pages deployment.
 
 ## License
 

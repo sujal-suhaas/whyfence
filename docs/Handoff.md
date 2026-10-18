@@ -47,6 +47,8 @@
   was deleted.
 - Pulled `main` and reran the full Docker, report, accuracy, version, and help
   checks after the merge.
+- Started issue #20 on `feat/20-static-landing-page` for the plain static
+  GitHub Pages landing page and checked-in report gallery.
 
 ## In progress
 
@@ -58,13 +60,14 @@
 - Issue #8 is merged and verified on `main`.
 - Issue #9 is merged and verified on `main`.
 - Issue #18 is merged and verified on `main`.
+- Issue #20 is in progress under the issue-level GO workflow.
 - The worktree was clean at the start of issue #18; no unrelated changes are
   included in this feature.
 
 ## Next
 
-- After issue #18 is merged and verified, review the next approved deliverable
-  before requesting or using another issue-level GO.
+- Finish the issue #20 diff/evidence review, then complete its PR lifecycle and
+  post-merge Pages/site verification.
 
 ## Gotchas
 

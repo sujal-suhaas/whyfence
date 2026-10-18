@@ -2,7 +2,8 @@
 
 ## Current status
 
-- `main` is clean and synchronized at `66851ed` after the issue #25 handoff.
+- `main` is clean and synchronized with `origin/main` after the issue #25
+  handoff.
 - Deliverables 1–4 are implemented: deterministic CLI core, offline fixture
   regression checks, standalone HTML reports, and the static Pages site.
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.

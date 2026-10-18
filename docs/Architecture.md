@@ -23,9 +23,12 @@ removed or rewritten. The core must be deterministic and offline.
   parses full-hash/subject citations, and extracts explicit issue/PR references
   without network or LLM dependencies. References and same-commit changed test
   paths stay attached to their originating citations.
+- `internal/risk/` reduces recovered citations to a deterministic evidence-backed
+  low, medium, or high removal-risk level without mutating the evidence.
 - `cmd/whyfence/main.go` sends validated ranges through `internal/evidence/` and
-  prints stable commit citations, changed test paths, and references; diff input
-  remains at the input-summary stage until its evidence slice is implemented.
+  `internal/risk/`, then prints stable commit citations, changed test paths,
+  references, and the range risk level; diff input remains at the input-summary
+  stage until its evidence slice is implemented.
 - `Dockerfile` is the reproducible test boundary; it pins Go and installs Git
   explicitly for the future local-history collector.
 - `.github/workflows/docker-test.yml` builds the image and runs the tests and

@@ -20,8 +20,11 @@ recognizes documented explicit issue/PR forms and keeps each reference attached
 to its source commit before the CLI formats it. The collector then runs a
 root-safe local `git diff-tree` query for each recovered commit, filters changed
 paths whose basenames end in `_test.go`, sorts those repository-relative paths,
-and attaches them to the same citation. A validated diff still becomes a stable
-terminal summary. Input and evidence failures are deterministic non-zero errors.
+and attaches them to the same citation. The CLI passes the complete citation set
+to `risk.Evaluate`, which emits the stable evidence-backed risk level before the
+terminal formatter writes `status: accepted`. A validated diff still becomes a
+stable terminal summary without a risk claim because diff evidence is not yet
+implemented. Input and evidence failures are deterministic non-zero errors.
 
 ## Planned core flow
 

@@ -173,3 +173,36 @@ evidence in this first slice.
 and language-neutral conventions were rejected because they would broaden an
 underspecified policy beyond the current Go project. A naïve parent-to-commit
 diff was rejected because it misses root-commit changes.
+
+## 2026-10-17 — classify evidence-backed removal risk
+
+**Context:** The evidence slices now recover commit citations, explicit issue/PR
+references, and same-commit changed tests. Issue #9 needs a deterministic risk
+flag without claiming knowledge that local Git cannot provide.
+
+**Decision:** Aggregate the complete recovered citation set into two signals:
+whether any citation has a `TestPaths` entry and whether any citation has an
+explicit `Reference`. Apply this matrix:
+
+| Evidence signals | Level |
+| --- | --- |
+| neither tests nor references | `low` |
+| tests only, or references only | `medium` |
+| both tests and references | `high` |
+| empty citation set | `high` |
+
+The evaluator is order-independent, does not mutate citations, and describes
+evidence-backed removal risk only. It does not measure runtime impact, ownership,
+dependency reachability, or business criticality. The initial flag is emitted
+for range input only; diff input has no recovered evidence yet.
+
+**Why:** A changed test signals an exercised behavior, while an explicit issue or
+PR reference signals a documented change context. The combination warrants the
+strongest caution. Treating empty evidence as high is conservative because no
+local history was recovered to support safe removal.
+
+**Rejected alternatives:** A numeric score and weighted thresholds were rejected
+because they would imply precision unsupported by the current evidence. Low risk
+for empty evidence was rejected because absence of recovered history is not
+evidence of safe removal. Emitting a diff risk was rejected until diff history
+recovery exists.

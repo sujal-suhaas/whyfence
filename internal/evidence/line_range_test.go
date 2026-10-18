@@ -121,6 +121,9 @@ func TestExtractReferences(t *testing.T) {
 	if got := ExtractReferences("unresolved #99 and acme/tool#100"); len(got) != 0 {
 		t.Fatalf("ambiguous references = %#v, want none", got)
 	}
+	if got := ExtractReferences("Title (#46) trailing"); len(got) != 0 {
+		t.Fatalf("non-suffix references = %#v, want none", got)
+	}
 }
 
 func TestLineRangeRejectsNonRepositoryFile(t *testing.T) {

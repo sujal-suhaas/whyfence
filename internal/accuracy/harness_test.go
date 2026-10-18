@@ -8,6 +8,7 @@ import (
 
 	"github.com/sujal-suhaas/whyfence/internal/evidence"
 	"github.com/sujal-suhaas/whyfence/internal/fixtures"
+	"github.com/sujal-suhaas/whyfence/internal/risk"
 )
 
 func TestRecoveryAccuracy(t *testing.T) {
@@ -18,6 +19,15 @@ func TestRecoveryAccuracy(t *testing.T) {
 	t.Cleanup(func() {
 		if err := history.Repository.Cleanup(); err != nil {
 			t.Errorf("cleanup accuracy fixture: %v", err)
+		}
+	})
+	riskHistory, err := fixtures.NewRiskHistory()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := riskHistory.Repository.Cleanup(); err != nil {
+			t.Errorf("cleanup risk accuracy fixture: %v", err)
 		}
 	})
 
@@ -121,6 +131,61 @@ func TestRecoveryAccuracy(t *testing.T) {
 				return citationReference(citations, history.Fix.Hash, evidence.PullRequestReference, 42)
 			},
 		},
+		{
+			Name:     "generated low risk",
+			Expected: string(risk.Low),
+			Resolve: func() (string, error) {
+				citations, err := recoverRiskCitations(riskHistory, riskHistory.LowPath)
+				if err != nil {
+					return "", err
+				}
+				return string(risk.Evaluate(citations)), nil
+			},
+		},
+		{
+			Name:     "generated medium risk from tests",
+			Expected: string(risk.Medium),
+			Resolve: func() (string, error) {
+				citations, err := recoverRiskCitations(riskHistory, riskHistory.TestOnlyPath)
+				if err != nil {
+					return "", err
+				}
+				return string(risk.Evaluate(citations)), nil
+			},
+		},
+		{
+			Name:     "generated medium risk from references",
+			Expected: string(risk.Medium),
+			Resolve: func() (string, error) {
+				citations, err := recoverRiskCitations(riskHistory, riskHistory.ReferencePath)
+				if err != nil {
+					return "", err
+				}
+				return string(risk.Evaluate(citations)), nil
+			},
+		},
+		{
+			Name:     "generated high risk",
+			Expected: string(risk.High),
+			Resolve: func() (string, error) {
+				citations, err := recoverRiskCitations(riskHistory, riskHistory.HighPath)
+				if err != nil {
+					return "", err
+				}
+				return string(risk.Evaluate(citations)), nil
+			},
+		},
+		{
+			Name:     "aggregate high risk",
+			Expected: string(risk.High),
+			Resolve: func() (string, error) {
+				citations, err := lineRangeCitations(history)
+				if err != nil {
+					return "", err
+				}
+				return string(risk.Evaluate(citations)), nil
+			},
+		},
 	}
 
 	report := Evaluate(cases)
@@ -165,6 +230,11 @@ func citationSummary(citations []evidence.Citation) string {
 
 func lineRangeCitations(history *fixtures.KnownHistory) ([]evidence.Citation, error) {
 	path := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
+	return evidence.RecoverLineRange(path, 3, 3)
+}
+
+func recoverRiskCitations(history *fixtures.RiskHistory, relativePath string) ([]evidence.Citation, error) {
+	path := filepath.Join(history.Repository.Dir, filepath.FromSlash(relativePath))
 	return evidence.RecoverLineRange(path, 3, 3)
 }
 

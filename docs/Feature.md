@@ -114,3 +114,20 @@ verification, and status.
   `TestLineRange`, and `TestRecoveryAccuracy` with `recovered 7 of 7`; full-suite
   and offline Docker checks passed before and after merge.
 - **Status:** Merged via PR #16 as squash commit `aba23165`.
+
+## Issue #9 — add deterministic risk flag
+
+- **Goal:** Classify recovered range evidence as low, medium, or high removal
+  risk and finish the generated accuracy suite.
+- **Approach:** Add an order-independent `internal/risk` evaluator using changed
+  test paths and explicit references as the two evidence signals; generate
+  isolated low, medium, and high fixture histories plus an aggregate high case;
+  and render `risk: <level>` for range output only.
+- **Files touched:** `cmd/whyfence/`, `internal/risk/`, `internal/fixtures/`,
+  `internal/accuracy/`, `docs/Architecture.md`, `docs/Flow.md`,
+  `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Go 1.23.0 and Docker passed risk unit tests, generated risk
+  fixtures, `TestRecoveryAccuracy` with `recovered 12 of 12`, the full suite,
+  CLI contract checks, no-cache image rebuild, Git availability, offline version,
+  and offline help checks; post-merge checks remain required.
+- **Status:** Implementation ready for review; PR lifecycle pending.

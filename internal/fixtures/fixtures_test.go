@@ -92,3 +92,34 @@ func TestFixtureBuilder(t *testing.T) {
 		t.Fatalf("fixture directory still exists after cleanup: %v", err)
 	}
 }
+
+func TestRiskFixtureBuilder(t *testing.T) {
+	history, err := NewRiskHistory()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := history.Repository.Cleanup(); err != nil {
+			t.Errorf("cleanup risk fixture repository: %v", err)
+		}
+	})
+
+	logOutput, err := history.Repository.Git("log", "--format=%H%x09%s")
+	if err != nil {
+		t.Fatal(err)
+	}
+	lines := strings.Split(strings.TrimSpace(logOutput), "\n")
+	if len(lines) != 4 {
+		t.Fatalf("risk fixture commit count = %d, want 4; log = %q", len(lines), logOutput)
+	}
+	for _, subject := range []string{
+		history.Low.Subject,
+		history.TestOnly.Subject,
+		history.Reference.Subject,
+		history.High.Subject,
+	} {
+		if !strings.Contains(logOutput, subject) {
+			t.Fatalf("risk fixture subject %q missing from log %q", subject, logOutput)
+		}
+	}
+}

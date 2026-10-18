@@ -35,6 +35,8 @@
   was deleted.
 - Pulled `main` and reran the full Docker, changed-test, and accuracy checks after
   the merge.
+- Started issue #9 on `feat/9-risk-flag` with evidence-backed low, medium, and
+  high risk evaluation and generated risk fixtures.
 
 ## In progress
 
@@ -44,13 +46,15 @@
 - Issue #6 is merged and verified on `main`.
 - Issue #7 is merged and verified on `main`.
 - Issue #8 is merged and verified on `main`.
+- Issue #9 is implemented and verified in its branch; its commit, PR, merge, and
+  post-merge lifecycle remain in progress under the issue-level GO workflow.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
 ## Next
 
-- After issue #8 is merged and verified, review issue #9's plan before requesting
-  or using its issue-level GO.
+- After issue #9 is merged and verified, review the next approved issue before
+  requesting or using another issue-level GO.
 
 ## Gotchas
 
@@ -60,8 +64,11 @@
 - The post-merge Docker checks run with `--network=none`; the image build needs
   network access for `apt-get install git`.
 - `docs/Bug.md` remains unrelated untracked documentation from the prior
-  skeleton setup and is not part of issue #6.
+  skeleton setup and is not part of issue #9.
 - The README install section remains intentionally unchanged.
+
+- Docker daemon was restarted locally before issue #9 verification because the
+  socket was unavailable; the project image and all offline checks then passed.
 
 ## Verification
 
@@ -163,3 +170,22 @@
   --version` after PR #16 merge: passed; output `whyfence 0.1.0-dev`.
 - `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
   after PR #16 merge: passed.
+- Go 1.23.0 `go test ./... -run
+  'TestEvaluateRiskLevels|TestEvaluateDoesNotMutateCitations|TestRiskFixtureBuilder'
+  -count=1 -v`: passed.
+- Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1 -v`: passed;
+  output `recovered 12 of 12`.
+- Go 1.23.0 `go test ./... -count=1`: passed on issue #9.
+- Docker `docker build --no-cache -t whyfence:test .`: passed on issue #9.
+- Docker `docker run --rm --network=none whyfence:test git --version`: passed;
+  output `git version 2.39.5`.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`:
+  passed on issue #9.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v`: passed; output `recovered 12 of 12`.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  TestCLIContract -count=1 -v`: passed.
+- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --version`: passed; output `whyfence 0.1.0-dev`.
+- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --help`: passed; input flags were listed.

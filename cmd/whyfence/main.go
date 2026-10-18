@@ -9,6 +9,7 @@ import (
 
 	"github.com/sujal-suhaas/whyfence/internal/evidence"
 	"github.com/sujal-suhaas/whyfence/internal/input"
+	"github.com/sujal-suhaas/whyfence/internal/risk"
 )
 
 const version = "0.1.0-dev"
@@ -68,6 +69,7 @@ func runWithInput(args []string, stdin io.Reader, stdout, stderr io.Writer) int 
 				fmt.Fprintf(stdout, "reference: %s #%d\n", reference.Kind, reference.Number)
 			}
 		}
+		fmt.Fprintf(stdout, "risk: %s\n", risk.Evaluate(citations))
 		fmt.Fprintln(stdout, "status: accepted")
 		return 0
 	}

@@ -2,6 +2,7 @@
 package report
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"html/template"
@@ -138,7 +139,17 @@ func Render(data Data) ([]byte, error) {
 	if err := documentTemplate.Execute(&output, data); err != nil {
 		return nil, fmt.Errorf("render report: %w", err)
 	}
-	return output.Bytes(), nil
+	return trimTrailingWhitespace(output.Bytes()), nil
+}
+
+// trimTrailingWhitespace keeps generated snapshots readable and makes their
+// byte-level diffs reflect report content instead of template indentation.
+func trimTrailingWhitespace(contents []byte) []byte {
+	lines := bytes.Split(contents, []byte{'\n'})
+	for index := range lines {
+		lines[index] = bytes.TrimRight(lines[index], " \t")
+	}
+	return bytes.Join(lines, []byte{'\n'})
 }
 
 // WriteAtomic writes contents to path through a same-directory temporary file.

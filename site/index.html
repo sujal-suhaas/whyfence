@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="whyfence uses local Git history to explain why code exists before it is deleted or rewritten.">
+  <title>whyfence — ask why before you delete</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="whyfence home">why<span>fence</span></a>
+    <nav aria-label="Primary navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#reports">Reports</a>
+      <a href="#install">Install</a>
+      <a class="nav-source" href="https://github.com/sujal-suhaas/whyfence">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">offline developer tool / local Git history</p>
+        <h1 id="hero-title">Before you delete code, ask <em>why</em> it exists.</h1>
+        <p class="hero-lede">whyfence turns a file range or diff into cited history, changed-test signals, explicit issue/PR references, and a conservative removal-risk flag.</p>
+        <div class="actions">
+          <a class="button button-primary" href="#reports">Explore reports <span aria-hidden="true">↓</span></a>
+          <a class="button button-quiet" href="https://github.com/sujal-suhaas/whyfence">Read the source <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="hero-note"><span class="dot"></span> Runs against the repository on your machine. No API key. No server. No network.</p>
+      </div>
+      <div class="terminal-card" aria-label="whyfence terminal demo">
+        <div class="terminal-top"><span class="terminal-light light-red"></span><span class="terminal-light light-yellow"></span><span class="terminal-light light-green"></span><span class="terminal-title">whyfence / local shell</span></div>
+        <pre><code><span class="prompt">$</span> go run ./cmd/whyfence \
+  --range cmd/whyfence/main.go:26-32 \
+  --report report.html
+
+<span class="output">report: report.html
+status: accepted</span></code></pre>
+        <a class="terminal-link" href="demo/terminal.txt">View the full demo <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="signal-strip" aria-label="whyfence properties">
+      <div><strong>01</strong><span>local-first</span></div>
+      <div><strong>02</strong><span>cited evidence</span></div>
+      <div><strong>03</strong><span>deterministic output</span></div>
+      <div><strong>04</strong><span>standalone reports</span></div>
+    </section>
+
+    <section class="section split-section" id="how-it-works" aria-labelledby="how-title">
+      <div class="section-intro">
+        <p class="eyebrow">The fence is the evidence</p>
+        <h2 id="how-title">History is the missing context.</h2>
+        <p>Diffs show what changed. whyfence helps recover the local history behind a targeted range before that context disappears.</p>
+      </div>
+      <div class="steps">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <h3>Point at a range</h3>
+          <p>Give the CLI an inclusive file range, or pass a unified diff when the change is the thing you have.</p>
+          <code>--range path:start-end</code>
+        </article>
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <h3>Recover local signals</h3>
+          <p>Git line history supplies commit citations. whyfence keeps explicit issue/PR references and same-commit Go test paths attached to each citation.</p>
+          <code>git log -L</code>
+        </article>
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <h3>Choose with context</h3>
+          <p>A deterministic low, medium, or high flag reflects only the recovered evidence. It is a caution signal, not a safety guarantee.</p>
+          <code>--report report.html</code>
+        </article>
+      </div>
+    </section>
+
+    <section class="section report-section" id="reports" aria-labelledby="reports-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Snapshots from local history</p>
+          <h2 id="reports-title">Open a report. See the evidence.</h2>
+        </div>
+        <p class="section-aside">Every HTML file below is checked in, standalone, and generated from a pinned repository commit.</p>
+      </div>
+      <div class="report-grid">
+        <article class="report-card report-card-featured">
+          <div class="card-top"><span class="card-label">Project sample</span><span class="risk risk-medium">medium</span></div>
+          <h3>whyfence</h3>
+          <p>CLI input and report generation in the repository that made this page.</p>
+          <dl class="card-meta"><div><dt>range</dt><dd><code>cmd/whyfence/main.go:26-32</code></dd></div><div><dt>evidence</dt><dd>3 local commits · changed tests</dd></div></dl>
+          <a class="card-link" href="reports/whyfence.html">Open report <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="report-card">
+          <div class="card-top"><span class="card-label">Apache-2.0</span><span class="risk risk-medium">medium</span></div>
+          <h3>spf13/cobra</h3>
+          <p>Command framework history around Cobra's package entry point.</p>
+          <dl class="card-meta"><div><dt>range</dt><dd><code>cobra.go:15-18</code></dd></div><div><dt>snapshot</dt><dd><code>adbc8813</code></dd></div></dl>
+          <a class="card-link" href="reports/cobra.html">Open report <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="report-card">
+          <div class="card-top"><span class="card-label">MIT</span><span class="risk risk-medium">medium</span></div>
+          <h3>urfave/cli</h3>
+          <p>A long-lived CLI package introduction with test-linked history.</p>
+          <dl class="card-meta"><div><dt>range</dt><dd><code>cli.go:1-18</code></dd></div><div><dt>snapshot</dt><dd><code>192ed0b9</code></dd></div></dl>
+          <a class="card-link" href="reports/urfave-cli.html">Open report <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="report-card">
+          <div class="card-top"><span class="card-label">MIT</span><span class="risk risk-medium">medium</span></div>
+          <h3>BurntSushi/toml</h3>
+          <p>Decoder imports with compatibility and test history attached.</p>
+          <dl class="card-meta"><div><dt>range</dt><dd><code>decode.go:3-18</code></dd></div><div><dt>snapshot</dt><dd><code>d733fc53</code></dd></div></dl>
+          <a class="card-link" href="reports/burntsushi-toml.html">Open report <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="report-card">
+          <div class="card-top"><span class="card-label">MIT</span><span class="risk risk-medium">medium</span></div>
+          <h3>sirupsen/logrus</h3>
+          <p>Logger API history showing the tests that moved with it.</p>
+          <dl class="card-meta"><div><dt>range</dt><dd><code>logger.go:12-18</code></dd></div><div><dt>snapshot</dt><dd><code>6ef0748d</code></dd></div></dl>
+          <a class="card-link" href="reports/logrus.html">Open report <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+      <p class="provenance-note">Source commits, repository links, generation commands, and attribution are recorded in <a href="reports/sources.md">reports/sources.md</a>.</p>
+    </section>
+
+    <section class="section install-section" id="install" aria-labelledby="install-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">No package registry required</p>
+          <h2 id="install-title">Run it from a clean checkout.</h2>
+        </div>
+        <p class="section-aside">whyfence uses Go 1.23.0, Git, and the standard library. Docker is the reproducible offline check.</p>
+      </div>
+      <div class="install-grid">
+        <div class="code-panel">
+          <div class="code-panel-title">setup + first report</div>
+          <pre><code>git clone https://github.com/sujal-suhaas/whyfence.git
+cd whyfence
+go test ./... -count=1
+go run ./cmd/whyfence \
+  --range cmd/whyfence/main.go:26-32 \
+  --report report.html</code></pre>
+        </div>
+        <div class="install-copy">
+          <h3>What you need</h3>
+          <ul class="check-list">
+            <li><strong>Go 1.23.0</strong><span>the pinned project toolchain</span></li>
+            <li><strong>Git</strong><span>the only evidence source</span></li>
+            <li><strong>Docker</strong><span>for the clean, network-disabled test boundary</span></li>
+          </ul>
+          <a class="text-link" href="https://github.com/sujal-suhaas/whyfence/blob/main/README.md">Read the full setup and deploy notes <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section boundary-section" aria-labelledby="boundary-title">
+      <p class="eyebrow">Keep the claim small</p>
+      <h2 id="boundary-title">Evidence is useful because it is bounded.</h2>
+      <div class="boundary-grid">
+        <div><h3>Range input</h3><p>Recovers local commit history, explicit references, changed Go test paths, and an evidence-backed risk level.</p></div>
+        <div><h3>Diff input</h3><p>Accepts and summarizes files and hunks. It does not claim recovered history or risk yet.</p></div>
+        <div><h3>Always local</h3><p>No GitHub API lookup, ownership inference, runtime-impact measurement, or live report updates.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><a class="brand" href="#top">why<span>fence</span></a><p>Local Git context for code that is about to change.</p></div>
+    <div class="footer-links"><a href="https://github.com/sujal-suhaas/whyfence">GitHub <span aria-hidden="true">↗</span></a><a href="reports/sources.md">Report sources</a><a href="https://github.com/sujal-suhaas/whyfence/blob/main/LICENSE">MIT license <span aria-hidden="true">↗</span></a></div>
+  </footer>
+</body>
+</html>

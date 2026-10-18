@@ -233,3 +233,28 @@ deliverable is a browser-readable report. A server, external assets, and
 JavaScript were rejected because judges rebuild and run offline. Timestamps were
 rejected because they make identical analyses produce different bytes. Diff risk
 was rejected because diff history evidence is not yet available.
+
+## 2026-10-18 — publish a plain static landing page from `site/`
+
+**Context:** Deliverable 4 needs a judge-readable project introduction, a real
+report sample, a terminal demo, and public-repository examples. The project must
+remain build-free and the CLI/Docker test boundary must stay focused on the
+offline Go core.
+
+**Decision:** Keep the landing page as plain local HTML and CSS in `site/`,
+check in five standalone report snapshots, and publish that directory with a
+GitHub Pages workflow that performs no site build. Record each snapshot's exact
+repository commit, input range, generation command, and license in
+`site/reports/sources.md`.
+
+**Why:** Relative local links and self-contained reports work both on GitHub
+Pages and from a downloaded checkout. A checked-in snapshot gallery proves the
+actual CLI output without requiring the page to fetch GitHub data or run a
+server. Keeping `site/` outside Docker's explicit `COPY` list preserves the
+reproducible test boundary.
+
+**Rejected alternatives:** A JavaScript-rendered gallery, CDN styles, and live
+GitHub API calls were rejected because they add runtime network dependencies and
+make offline review weaker. A package-manager install command was rejected
+because whyfence is not published. A live report generator on the page was
+rejected because reports are intentionally local, pinned snapshots.

@@ -80,6 +80,18 @@ func TestDiffReportOmitsRisk(t *testing.T) {
 	}
 }
 
+func TestRenderOmitsTrailingWhitespace(t *testing.T) {
+	output, err := Render(Data{Status: "accepted", Input: Input{Mode: "diff", Path: "change.patch"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for lineNumber, line := range strings.Split(string(output), "\n") {
+		if strings.TrimRight(line, " \t") != line {
+			t.Fatalf("line %d has trailing whitespace: %q", lineNumber+1, line)
+		}
+	}
+}
+
 func TestWriteAtomicOverwritesReport(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "report.html")
 	if err := WriteAtomic(path, []byte("first")); err != nil {

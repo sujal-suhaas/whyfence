@@ -25,10 +25,12 @@ removed or rewritten. The core must be deterministic and offline.
   paths stay attached to their originating citations.
 - `internal/risk/` reduces recovered citations to a deterministic evidence-backed
   low, medium, or high removal-risk level without mutating the evidence.
+- `internal/report/` renders the validated analysis as deterministic standalone
+  HTML with inline CSS and no network or external asset dependencies.
 - `cmd/whyfence/main.go` sends validated ranges through `internal/evidence/` and
-  `internal/risk/`, then prints stable commit citations, changed test paths,
-  references, and the range risk level; diff input remains at the input-summary
-  stage until its evidence slice is implemented.
+  `internal/risk/`, then formats either stable terminal output or a named HTML
+  report. Range reports include evidence and risk; diff reports include only the
+  accepted input summary because diff evidence is not implemented.
 - `Dockerfile` is the reproducible test boundary; it pins Go and installs Git
   explicitly for the future local-history collector.
 - `.github/workflows/docker-test.yml` builds the image and runs the tests and
@@ -39,6 +41,7 @@ removed or rewritten. The core must be deterministic and offline.
 - CLI input accepts a file range or diff.
 - Local Git history is the only evidence source for the core.
 - Evidence is cited, then a deterministic risk flag is produced.
+- An optional named report path writes a self-contained HTML artifact.
 - Optional LLM summaries remain outside the deterministic core and are disabled
   in tests.
 

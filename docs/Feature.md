@@ -134,3 +134,20 @@ verification, and status.
   blocked by a local Docker SIGBUS followed by a sandbox I/O failure.
 - **Status:** Merged via PR #17 as squash commit `80ac53dc`; post-merge smoke
   rerun has an environment blocker documented in `docs/Handoff.md`.
+
+## Issue #18 — generate self-contained static HTML reports
+
+- **Goal:** Write deterministic, standalone HTML reports from the existing range
+  and diff analysis results without a server or network access.
+- **Approach:** Add `--report PATH`, map validated input/evidence into an
+  `internal/report` data model, render inline-CSS HTML with `html/template`, and
+  atomically write a named file. Range reports include risk/evidence; diff
+  reports remain summary-only with no risk claim.
+- **Files touched:** `cmd/whyfence/`, `internal/report/`, `README.md`,
+  `docs/Architecture.md`, `docs/Flow.md`, `docs/Decisions.md`,
+  `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker-mounted Go 1.23.0 passed `TestHTMLReport`,
+  `TestCLIReport`, `TestCLIContract`, `TestRecoveryAccuracy`, the full suite,
+  no-cache image rebuild, Git availability, offline version/help, and
+  `git diff --check`; post-merge checks remain required.
+- **Status:** Implementation ready for review; PR lifecycle pending.

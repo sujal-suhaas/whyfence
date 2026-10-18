@@ -29,7 +29,7 @@ func TestHelpFlag(t *testing.T) {
 	if exitCode := run([]string{"--help"}, &stdout, &stderr); exitCode != 0 {
 		t.Fatalf("--help exit code = %d, want 0", exitCode)
 	}
-	if !strings.Contains(stderr.String(), "-range string") || !strings.Contains(stderr.String(), "-diff string") {
+	if !strings.Contains(stderr.String(), "-range string") || !strings.Contains(stderr.String(), "-diff string") || !strings.Contains(stderr.String(), "-report string") {
 		t.Fatalf("help output omitted input flags: %q", stderr.String())
 	}
 }
@@ -117,4 +117,95 @@ func TestCLIContractErrors(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestCLIReport(t *testing.T) {
+	history, err := fixtures.NewKnownHistory()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := history.Repository.Cleanup(); err != nil {
+			t.Errorf("cleanup report CLI fixture: %v", err)
+		}
+	})
+	file := filepath.Join(history.Repository.Dir, filepath.FromSlash(history.TargetPath))
+
+	t.Run("writes range report", func(t *testing.T) {
+		reportPath := filepath.Join(t.TempDir(), "range.html")
+		var stdout, stderr bytes.Buffer
+		if exitCode := run([]string{"--range", file + ":1-3", "--report", reportPath}, &stdout, &stderr); exitCode != 0 {
+			t.Fatalf("range report exit code = %d, stderr = %q", exitCode, stderr.String())
+		}
+		if stdout.String() != "report: "+reportPath+"\nstatus: accepted\n" {
+			t.Fatalf("range report confirmation = %q", stdout.String())
+		}
+		if stderr.Len() != 0 {
+			t.Fatalf("range report wrote stderr = %q", stderr.String())
+		}
+		contents, err := os.ReadFile(reportPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		text := string(contents)
+		for _, want := range []string{"<!doctype html>", "risk-high", history.Fix.Subject, history.TestPath, "issue #41"} {
+			if !strings.Contains(text, want) {
+				t.Fatalf("range report omitted %q", want)
+			}
+		}
+	})
+
+	t.Run("writes diff report without risk", func(t *testing.T) {
+		diffPath := filepath.Join(t.TempDir(), "change.patch")
+		diff := "diff --git a/worker.go b/worker.go\n--- a/worker.go\n+++ b/worker.go\n@@ -1,1 +1,1 @@\n-old\n+new\n"
+		if err := os.WriteFile(diffPath, []byte(diff), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		reportPath := filepath.Join(t.TempDir(), "diff.html")
+		var stdout, stderr bytes.Buffer
+		if exitCode := run([]string{"--diff", diffPath, "--report", reportPath}, &stdout, &stderr); exitCode != 0 {
+			t.Fatalf("diff report exit code = %d, stderr = %q", exitCode, stderr.String())
+		}
+		contents, err := os.ReadFile(reportPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		text := string(contents)
+		if !strings.Contains(text, diffPath) || !strings.Contains(text, "Diff input is accepted") {
+			t.Fatalf("diff report omitted summary: %q", text)
+		}
+		if strings.Contains(text, "<dt>Risk</dt>") {
+			t.Fatalf("diff report unexpectedly contains risk: %q", text)
+		}
+	})
+
+	t.Run("writes diff stdin report", func(t *testing.T) {
+		reportPath := filepath.Join(t.TempDir(), "stdin.html")
+		stdin := bytes.NewBufferString("--- a/worker.go\n+++ b/worker.go\n@@ -1 +1 @@\n-old\n+new\n")
+		var stdout, stderr bytes.Buffer
+		if exitCode := runWithInput([]string{"--diff", "-", "--report", reportPath}, stdin, &stdout, &stderr); exitCode != 0 {
+			t.Fatalf("stdin report exit code = %d, stderr = %q", exitCode, stderr.String())
+		}
+		if _, err := os.Stat(reportPath); err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("rejects output stream and failed destination", func(t *testing.T) {
+		for _, reportPath := range []string{
+			"-",
+			filepath.Join(t.TempDir(), "missing", "report.html"),
+		} {
+			var stdout, stderr bytes.Buffer
+			if exitCode := run([]string{"--range", file + ":1-3", "--report", reportPath}, &stdout, &stderr); exitCode != 2 {
+				t.Fatalf("report path %q exit code = %d, want 2", reportPath, exitCode)
+			}
+			if !strings.HasPrefix(stderr.String(), "output:") {
+				t.Fatalf("report path %q stderr = %q, want output error", reportPath, stderr.String())
+			}
+			if stdout.Len() != 0 {
+				t.Fatalf("report path %q wrote stdout = %q", reportPath, stdout.String())
+			}
+		}
+	})
 }

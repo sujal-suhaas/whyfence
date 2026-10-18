@@ -22,14 +22,17 @@ root-safe local `git diff-tree` query for each recovered commit, filters changed
 paths whose basenames end in `_test.go`, sorts those repository-relative paths,
 and attaches them to the same citation. The CLI passes the complete citation set
 to `risk.Evaluate`, which emits the stable evidence-backed risk level before the
-terminal formatter writes `status: accepted`. A validated diff still becomes a
-stable terminal summary without a risk claim because diff evidence is not yet
-implemented. Input and evidence failures are deterministic non-zero errors.
+formatter writes either terminal output or a report. With `--report PATH`, the
+CLI maps the validated request and evidence into `report.Data`, renders a
+deterministic standalone HTML document, atomically writes it, and prints only a
+stable report confirmation. A validated diff still becomes a stable summary
+report without a risk claim because diff evidence is not yet implemented. Input,
+evidence, and report-write failures are deterministic non-zero errors.
 
 ## Planned core flow
 
 CLI entry point → input/range or diff parser → local Git evidence collector →
 commit/issue/PR/test citation builder → deterministic risk evaluator → terminal
-report formatter.
+or static HTML report formatter.
 
 Update this map whenever execution crosses a new file or function.

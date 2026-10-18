@@ -206,3 +206,30 @@ because they would imply precision unsupported by the current evidence. Low risk
 for empty evidence was rejected because absence of recovered history is not
 evidence of safe removal. Emitting a diff risk was rejected until diff history
 recovery exists.
+
+## 2026-10-18 — write deterministic standalone HTML reports
+
+**Context:** Deliverable 3 needs a browser-openable artifact without adding a
+server, network access, or a second output dependency. The existing range and
+diff analysis results already contain the data needed for a report.
+
+**Decision:** Add `--report PATH` as an optional named output path. Render a
+complete HTML document with `html/template`, inline CSS, semantic sections, and
+no JavaScript, timestamp, external URL, font, image, or stylesheet. Range reports
+include citations, changed tests, references, and risk. Diff reports include
+their validated source/file/hunk summary and explicitly state that evidence and
+risk are unavailable. Without `--report`, terminal output remains unchanged.
+Write through a same-directory temporary file and rename it into place; reject
+`--report -` to keep stdout and HTML unambiguous. Report failures use an
+`output:` prefix and occur before any success confirmation.
+
+**Why:** A named, inline-only artifact is portable to a local browser and GitHub
+Pages, deterministic for tests, and safe to use offline. Keeping rendering
+separate from evidence collection prevents HTML formatting from performing Git
+queries or changing analysis behavior.
+
+**Rejected alternatives:** JSON-first output was rejected because the immediate
+deliverable is a browser-readable report. A server, external assets, and
+JavaScript were rejected because judges rebuild and run offline. Timestamps were
+rejected because they make identical analyses produce different bytes. Diff risk
+was rejected because diff history evidence is not yet available.

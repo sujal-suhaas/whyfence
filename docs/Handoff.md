@@ -49,6 +49,12 @@
   checks after the merge.
 - Started issue #20 on `feat/20-static-landing-page` for the plain static
   GitHub Pages landing page and checked-in report gallery.
+- Merged issue #22 through PR #23 as squash commit `7075929`; its remote branch
+  was deleted.
+- Enabled workflow-backed GitHub Pages through the authorized repository API,
+  reran the deployment workflow successfully, and verified the published site.
+- Pulled `main` and reran the post-merge Docker rebuild, full suite, and Git
+  availability checks after the Pages fix.
 
 ## In progress
 
@@ -60,14 +66,16 @@
 - Issue #8 is merged and verified on `main`.
 - Issue #9 is merged and verified on `main`.
 - Issue #18 is merged and verified on `main`.
-- Issue #20 is in progress under the issue-level GO workflow.
+- Issue #20 is merged and verified on `main`.
+- Issue #22 is resolved and verified on `main`.
 - The worktree was clean at the start of issue #18; no unrelated changes are
   included in this feature.
 
 ## Next
 
-- Finish the issue #20 diff/evidence review, then complete its PR lifecycle and
-  post-merge Pages/site verification.
+- All four planned deliverables are implemented and verified. Next: prepare the
+  final demo/submission handoff; do not start stretch work without explicit
+  approval.
 
 ## Gotchas
 
@@ -77,6 +85,9 @@
 - The post-merge Docker checks run with `--network=none`; the image build needs
   network access for `apt-get install git`.
 - README now documents the tested Go/Docker setup and report commands.
+- GitHub Pages required one-time repository-level enablement because the default
+  Actions token could not create the Pages site. The site is now configured for
+  workflow deployment; forks may still need Settings → Pages once.
 
 - Docker daemon was restarted locally during issue #9 verification because the
   socket was unavailable; subsequent post-merge build, tests, version, and help
@@ -234,3 +245,15 @@
   --version` after PR #19 merge: passed; output `whyfence 0.1.0-dev`.
 - Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
   --help` after PR #19 merge: passed; `--report` was listed.
+- The first post-merge landing-page workflow failed at Configure Pages with
+  `Resource not accessible by integration`; see `docs/Bug.md` and workflow run
+  `39122917936`.
+- Docker `docker build --no-cache -t whyfence:test .` after PR #23 merge:
+  passed.
+- Docker `docker run --rm --network=none whyfence:test git --version` after
+  PR #23 merge: passed; output `git version 2.39.5`.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`
+  after PR #23 merge: passed.
+- Pages workflow run `39123292582`: passed Configure Pages, upload, and deploy.
+- Published site smoke fetch: passed at
+  `https://sujal-suhaas.github.io/whyfence/`.

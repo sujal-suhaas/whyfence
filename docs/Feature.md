@@ -163,11 +163,15 @@ verification, and status.
   upload `site/` directly through a no-build GitHub Pages workflow.
 - **Files touched:** `site/index.html`, `site/styles.css`, `site/demo/terminal.txt`,
   `site/reports/*.html`, `site/reports/sources.md`, `.github/workflows/pages.yml`,
-  `README.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
+  `internal/report/`, `README.md`, `docs/Decisions.md`, `docs/Feature.md`,
+  `docs/Handoff.md`.
 - **Verification:** Static Python smoke check passed with five standalone reports
   and twenty local landing-page links; Docker-mounted Go 1.23.0 passed
   `go test ./... -count=1` and the documented `go run ... --report` demo;
-  `git diff --check` passed.
+  `git diff --check` passed. The same Docker/site checks passed after merge, and
+  the GitHub Pages workflow deployed the site successfully after issue #22
+  enabled the repository Pages configuration.
 - **Rollback:** Revert the issue #20 feature commit; the CLI, report renderer,
   tests, and Docker boundary remain intact.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+- **Status:** Merged via PR #21 as squash commit `789559f`; Pages deployment
+  fix completed via PR #23 as squash commit `7075929`.

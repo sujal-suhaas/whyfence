@@ -23,7 +23,7 @@
       <div class="hero-copy">
         <p class="eyebrow">offline developer tool / local Git history</p>
         <h1 id="hero-title">Before you delete code, ask <em>why</em> it exists.</h1>
-        <p class="hero-lede">whyfence turns a file range or diff into cited history, changed-test signals, explicit issue/PR references, and a conservative removal-risk flag.</p>
+        <p class="hero-lede">whyfence turns a file range into cited local history, changed-test signals, explicit references, and a conservative removal-risk flag. A diff gets a deterministic summary while history recovery is still range-only.</p>
         <div class="actions">
           <a class="button button-primary" href="#reports">Explore reports <span aria-hidden="true">↓</span></a>
           <a class="button button-quiet" href="https://github.com/sujal-suhaas/whyfence">Read the source <span aria-hidden="true">↗</span></a>
@@ -59,19 +59,19 @@ status: accepted</span></code></pre>
         <article class="step-card">
           <span class="step-number">01</span>
           <h3>Point at a range</h3>
-          <p>Give the CLI an inclusive file range, or pass a unified diff when the change is the thing you have.</p>
+          <p>Give the CLI an inclusive file range for history recovery, or pass a unified diff when the change is the thing you have.</p>
           <code>--range path:start-end</code>
         </article>
         <article class="step-card">
           <span class="step-number">02</span>
           <h3>Recover local signals</h3>
-          <p>Git line history supplies commit citations. whyfence keeps explicit issue/PR references and same-commit Go test paths attached to each citation.</p>
+          <p>For ranges, Git line history supplies commit citations. whyfence keeps explicit references and same-commit Go test paths attached to each citation.</p>
           <code>git log -L</code>
         </article>
         <article class="step-card">
           <span class="step-number">03</span>
           <h3>Choose with context</h3>
-          <p>A deterministic low, medium, or high flag reflects only the recovered evidence. It is a caution signal, not a safety guarantee.</p>
+          <p>A deterministic low, medium, or high flag reflects only recovered range evidence. It is a caution signal, not a safety guarantee; diff input has no risk flag yet.</p>
           <code>--report report.html</code>
         </article>
       </div>

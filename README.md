@@ -1,9 +1,11 @@
 # whyfence
 
 whyfence is a local, git-only CLI that helps explain why code exists before it
-is deleted or rewritten. Given a file range or diff, it will produce cited
-evidence from local Git history, including related commits, issues, pull
-requests, and tests changed alongside the code, plus a risk flag.
+is deleted or rewritten. Given a file range, it produces cited evidence from
+local Git history, including related commits, supported issue/PR references, and
+tests changed alongside the code, plus an evidence-backed risk flag. Given a unified diff,
+it validates and summarizes the source, changed-file count, and hunk count; diff
+history evidence and risk are not implemented yet.
 
 The core is designed to be deterministic and fully offline. Any LLM summary is
 optional and disabled in tests.
@@ -14,7 +16,7 @@ The offline CLI core, self-contained static HTML report, and plain GitHub Pages
 landing page are implemented and tested. No package is published; use the Go
 toolchain or Docker commands below.
 
-The planned deliverables are intentionally ordered:
+The completed deliverables were intentionally ordered:
 
 1. CLI core.
 2. Offline fixture-repository tests and Docker rebuild checks.
@@ -38,10 +40,10 @@ go test ./... -count=1
 
 ## Run
 
-Analyze an inclusive file range from a local Git repository:
+Analyze an inclusive file range from this or another local Git repository:
 
 ```sh
-go run ./cmd/whyfence --range internal/worker.go:3-3
+go run ./cmd/whyfence --range cmd/whyfence/main.go:26-32
 ```
 
 Analyze a unified diff:
@@ -56,7 +58,7 @@ cat change.patch | go run ./cmd/whyfence --diff -
 Write a deterministic, standalone report to a named file:
 
 ```sh
-go run ./cmd/whyfence --range internal/worker.go:3-3 --report report.html
+go run ./cmd/whyfence --range cmd/whyfence/main.go:26-32 --report report.html
 go run ./cmd/whyfence --diff change.patch --report diff-report.html
 ```
 

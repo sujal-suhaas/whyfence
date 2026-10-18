@@ -258,3 +258,18 @@ GitHub API calls were rejected because they add runtime network dependencies and
 make offline review weaker. A package-manager install command was rejected
 because whyfence is not published. A live report generator on the page was
 rejected because reports are intentionally local, pinned snapshots.
+
+## 2026-10-18 — describe fixture counts as regression coverage
+
+**Context:** The offline harness reports `recovered N of M`, but every expected
+reason is authored by the generated fixtures. Presenting that count as a
+real-repository accuracy percentage would overstate what the test proves.
+
+**Decision:** Describe the harness as generated-fixture regression coverage in
+the README, architecture, flow, feature log, handoff, and demo guidance. Keep
+the stable `recovered N of M` output because it makes missed regressions visible
+without implying an external benchmark.
+
+**Rejected alternative:** Calling the count an accuracy score was rejected
+because the current suite does not sample independent repositories or establish
+a ground-truth corpus outside its own fixtures.

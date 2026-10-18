@@ -190,12 +190,12 @@ verification, and status.
 - **Files touched:** `AGENTS.md`, `README.md`, `site/index.html`,
   `docs/Architecture.md`, `docs/Flow.md`, `docs/Feature.md`,
   `docs/Handoff.md`, `docs/Decisions.md`, `internal/input/contract_test.go`.
-- **Verification:** Docker Go 1.23.0 passed the direct `internal/input` tests;
-  documentation smoke checks and `git diff --check` passed. Full Docker and
-  static-site checks remain part of the issue lifecycle.
+- **Verification:** Docker Go 1.23.0 passed the direct `internal/input` tests,
+  full suite, no-cache rebuild, Git/version/help checks, documentation smoke
+  checks, and `git diff --check` before and after merge.
 - **Rollback:** Revert the issue #24 commit; runtime behavior and the report
   renderer remain unchanged.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+- **Status:** Merged via PR #26 as squash commit `106585b`.
 
 ## Issue #25 — preserve unclassified GitHub squash references
 
@@ -214,7 +214,7 @@ verification, and status.
   the full suite, no-cache rebuild, Git/version/help checks, and the mounted
   self-demo. The self-demo shows `unclassified #18` and high risk; regenerated
   reports and static/HTTP site checks passed while diff behavior remains
-  unchanged.
+  unchanged. The same matrix passed after merge.
 - **Rollback:** Revert the issue #25 commit; explicit issue/PR parsing and the
   existing risk matrix remain intact.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+- **Status:** Merged via PR #27 as squash commit `457d1af`.

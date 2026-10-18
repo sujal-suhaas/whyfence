@@ -2,14 +2,11 @@
 
 ## Current status
 
-- `main` was clean and synchronized at `a71ca47` when issue #24 started.
+- `main` is clean and synchronized at `457d1af` after issue #25.
 - Deliverables 1–4 are implemented: deterministic CLI core, offline fixture
   regression checks, standalone HTML reports, and the static Pages site.
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
-- Work in progress: issue #24 on `fix/24-docs-and-input-tests` corrects stale
-  claims and adds direct `internal/input` contract tests.
-- Work in progress: issue #25 on `feat/25-unclassified-squash-references`
-  preserves narrow GitHub squash suffixes as honest `unclassified` references.
+- Issues #24 and #25 are merged and verified on `main`.
 
 ## Completed lifecycle
 
@@ -19,14 +16,13 @@
 | Issue #18 / PR #19 | Deterministic standalone HTML reports; merged as `bad17659`. |
 | Issue #20 / PR #21 | Static landing page, five report snapshots, and Pages workflow; merged as `789559f`. |
 | Issue #22 / PR #23 | Pages enablement fix; merged as `7075929`. |
+| Issue #24 / PR #26 | Documentation alignment and direct input parser tests; merged as `106585b`. |
+| Issue #25 / PR #27 | Honest `unclassified` GitHub squash references; merged as `457d1af`. |
 | Pages deployment | Workflow run `39123292582` passed; site published successfully. |
 
 ## Next
 
-1. Finish issue #24 with focused parser tests, documentation checks, and the
-   issue PR lifecycle.
-2. Finish the issue #25 PR lifecycle and review the regenerated self-report.
-3. Prepare the final demo/submission handoff. Do not start stretch work without
+1. Prepare the final demo/submission handoff. Do not start stretch work without
    explicit approval.
 
 ## Truth boundaries
@@ -58,7 +54,7 @@
 
 ## Verification evidence
 
-- Latest merged-main Docker rebuild before issue #24:
+- Latest merged-main Docker rebuild after issue #25:
   `docker build --no-cache -t whyfence:test .` — passed.
 - Latest merged-main offline core suite:
   `docker run --rm --network=none whyfence:test go test ./... -count=1` — passed.
@@ -68,11 +64,17 @@
 - Latest merged-main offline CLI smoke checks:
   `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`
   and `--help` — passed; help listed `--report`.
+- Mounted self-demo after issue #25:
+  `docker run --rm --network=none -v "$PWD:/src" -w /src whyfence:test go run
+  ./cmd/whyfence --range cmd/whyfence/main.go:26-32` — passed; output included
+  `unclassified #18` and `risk: high`.
+- Focused evidence/risk/report tests after issue #25 — passed, including
+  unclassified-reference parsing and risk behavior.
 - Static site smoke check — passed with five standalone reports and twenty local
   landing-page links.
 - Local HTTP smoke check — passed for the landing page, report files, and demo.
 - Pages workflow run `39123292582` — passed Configure Pages, upload, and deploy.
-- `git diff --check` — passed on the merged landing-page and Pages-fix changes.
+- `git diff --check` — passed after issue #25.
 
 Update this handoff at the end of each issue lifecycle with only the current
 branch, next action, gotchas, and actual checks.

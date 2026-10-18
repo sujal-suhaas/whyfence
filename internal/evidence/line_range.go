@@ -54,7 +54,7 @@ var referencePatterns = []referencePattern{
 	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\b(?:pr|pull request)\s*(?::\s*|\s+)#([0-9]+)\b`)},
 	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\bmerge\s+pull\s+request\s+#([0-9]+)\b`)},
 	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\bhttps://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/([0-9]+)\b`)},
-	{kind: UnclassifiedReference, pattern: regexp.MustCompile(`(?:^|[[:space:]])\(#([0-9]+)\)(?:$|[[:space:]])`)},
+	{kind: UnclassifiedReference, pattern: regexp.MustCompile(`(?:^|[[:space:]])\(#([0-9]+)\)$`)},
 }
 
 type referenceMatch struct {

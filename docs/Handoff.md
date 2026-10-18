@@ -8,6 +8,7 @@
   regression checks, standalone HTML reports, and the static Pages site.
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
 - Issues #24 and #25 are merged and verified on `main`.
+- Work in progress: issue #28 tightens the `unclassified` suffix boundary.
 
 ## Completed lifecycle
 
@@ -23,7 +24,8 @@
 
 ## Next
 
-1. Prepare the final demo/submission handoff. Do not start stretch work without
+1. Finish issue #28's focused regression check and PR lifecycle.
+2. Prepare the final demo/submission handoff. Do not start stretch work without
    explicit approval.
 
 ## Truth boundaries

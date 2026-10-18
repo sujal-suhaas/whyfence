@@ -23,3 +23,20 @@ verification, rollback, and status.
 - **Rollback:** Revert the issue #22 fix commit; the site can still be enabled
   manually in repository Settings → Pages.
 - **Status:** Resolved via PR #23 as squash commit `7075929`.
+
+## Issue #28 — restrict unclassified references to subject suffixes
+
+- **Problem:** The new `unclassified` parser boundary accepted `(#N)` followed
+  by additional subject text, although the contract is specifically the
+  GitHub-style end-of-subject suffix.
+- **Cause:** The initial regular expression allowed whitespace after the
+  parenthesized number instead of requiring end-of-subject.
+- **Approach:** Require `(#N)` to end the subject and add a regression test for
+  `Title (#46) trailing`.
+- **Files touched:** `internal/evidence/line_range.go`,
+  `internal/evidence/line_range_test.go`, `docs/Bug.md`.
+- **Verification:** Focused `TestExtractReferences` passed; full offline/Docker
+  checks and the issue PR lifecycle remain required.
+- **Rollback:** Revert the issue #28 fix commit; issue #25's broader boundary
+  behavior is restored.
+- **Status:** Fix in progress.

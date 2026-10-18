@@ -129,5 +129,8 @@ verification, and status.
 - **Verification:** Go 1.23.0 and Docker passed risk unit tests, generated risk
   fixtures, `TestRecoveryAccuracy` with `recovered 12 of 12`, the full suite,
   CLI contract checks, no-cache image rebuild, Git availability, offline version,
-  and offline help checks; post-merge checks remain required.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+  and offline help checks before merge; post-merge full suite, risk tests,
+  accuracy, and CLI contract checks passed. The post-merge version/help rerun was
+  blocked by a local Docker SIGBUS followed by a sandbox I/O failure.
+- **Status:** Merged via PR #17 as squash commit `80ac53dc`; post-merge smoke
+  rerun has an environment blocker documented in `docs/Handoff.md`.

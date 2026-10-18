@@ -37,6 +37,10 @@
   the merge.
 - Started issue #9 on `feat/9-risk-flag` with evidence-backed low, medium, and
   high risk evaluation and generated risk fixtures.
+- Merged issue #9 through PR #17 as squash commit `80ac53dc`; its remote branch
+  was deleted.
+- Pulled `main` and reran the post-merge Docker build, full suite, risk tests,
+  accuracy, and CLI contract checks.
 
 ## In progress
 
@@ -46,8 +50,8 @@
 - Issue #6 is merged and verified on `main`.
 - Issue #7 is merged and verified on `main`.
 - Issue #8 is merged and verified on `main`.
-- Issue #9 is implemented and verified in its branch; its commit, PR, merge, and
-  post-merge lifecycle remain in progress under the issue-level GO workflow.
+- Issue #9 is merged and verified on `main`; the post-merge version/help smoke
+  rerun is blocked by the local Docker/sandbox runtime described below.
 - Untracked `docs/Bug.md` remains from the documentation skeleton setup and is
   intentionally untouched.
 
@@ -69,6 +73,11 @@
 
 - Docker daemon was restarted locally before issue #9 verification because the
   socket was unavailable; the project image and all offline checks then passed.
+- After the post-merge full checks passed, isolated `go run --version` and
+  `go run --help` containers failed with Go SIGBUS errors, followed by the local
+  shell returning `fork/exec /bin/bash: input/output error`. The pre-merge
+  version/help checks passed; retry these two smoke checks when the sandbox
+  runtime recovers before treating the handoff as fully closed.
 
 ## Verification
 
@@ -185,6 +194,22 @@
   TestRecoveryAccuracy -count=1 -v`: passed; output `recovered 12 of 12`.
 - Docker `docker run --rm --network=none whyfence:test go test ./... -run
   TestCLIContract -count=1 -v`: passed.
+- `git pull --ff-only origin main`: passed after PR #17 merge.
+- Docker `docker build --no-cache -t whyfence:test .` after PR #17 merge:
+  passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`
+  after PR #17 merge: passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  'TestEvaluateRiskLevels|TestEvaluateDoesNotMutateCitations|TestRiskFixtureBuilder'
+  -count=1 -v` after PR #17 merge: passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` after PR #17 merge: passed; output
+  `recovered 12 of 12`.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  TestCLIContract -count=1 -v` after PR #17 merge: passed.
+- Post-merge Docker `go run ./cmd/whyfence --version` and `--help` retries:
+  blocked by SIGBUS in the local container runtime, followed by sandbox I/O
+  failure; not claimed as passed.
 - Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
   --version`: passed; output `whyfence 0.1.0-dev`.
 - Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence

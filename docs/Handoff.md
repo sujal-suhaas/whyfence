@@ -43,6 +43,10 @@
   accuracy, and CLI contract checks.
 - Started issue #18 on `feat/18-static-html-report` for deterministic standalone
   HTML report output.
+- Merged issue #18 through PR #19 as squash commit `bad17659`; its remote branch
+  was deleted.
+- Pulled `main` and reran the full Docker, report, accuracy, version, and help
+  checks after the merge.
 
 ## In progress
 
@@ -53,7 +57,7 @@
 - Issue #7 is merged and verified on `main`.
 - Issue #8 is merged and verified on `main`.
 - Issue #9 is merged and verified on `main`.
-- Issue #18 is in progress under the issue-level GO workflow.
+- Issue #18 is merged and verified on `main`.
 - The worktree was clean at the start of issue #18; no unrelated changes are
   included in this feature.
 
@@ -210,3 +214,20 @@
   --version`: passed; output `whyfence 0.1.0-dev`.
 - Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
   --help`: passed; input flags were listed.
+- `git pull --ff-only origin main`: passed after PR #19 merge.
+- Docker `docker build --no-cache -t whyfence:test .` after PR #19 merge:
+  passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`
+  after PR #19 merge: passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  'TestHTMLReport|TestDiffReportOmitsRisk|TestWriteAtomicOverwritesReport'
+  -count=1 -v` after PR #19 merge: passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  TestCLIReport -count=1 -v` after PR #19 merge: passed.
+- Docker `docker run --rm --network=none whyfence:test go test ./... -run
+  TestRecoveryAccuracy -count=1 -v` after PR #19 merge: passed; output
+  `recovered 12 of 12`.
+- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --version` after PR #19 merge: passed; output `whyfence 0.1.0-dev`.
+- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
+  --help` after PR #19 merge: passed; `--report` was listed.

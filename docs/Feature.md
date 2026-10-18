@@ -149,5 +149,6 @@ verification, and status.
 - **Verification:** Docker-mounted Go 1.23.0 passed `TestHTMLReport`,
   `TestCLIReport`, `TestCLIContract`, `TestRecoveryAccuracy`, the full suite,
   no-cache image rebuild, Git availability, offline version/help, and
-  `git diff --check`; post-merge checks remain required.
-- **Status:** Implementation ready for review; PR lifecycle pending.
+  `git diff --check`; the same report, full-suite, accuracy, version, and help
+  checks passed after merge.
+- **Status:** Merged via PR #19 as squash commit `bad17659`.

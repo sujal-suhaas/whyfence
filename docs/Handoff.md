@@ -2,7 +2,7 @@
 
 ## Current status
 
-- `main` is clean and synchronized at `457d1af` after issue #25.
+- `main` is clean and synchronized at `66851ed` after the issue #25 handoff.
 - Deliverables 1–4 are implemented: deterministic CLI core, offline fixture
   regression checks, standalone HTML reports, and the static Pages site.
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
@@ -18,7 +18,7 @@
 | Issue #22 / PR #23 | Pages enablement fix; merged as `7075929`. |
 | Issue #24 / PR #26 | Documentation alignment and direct input parser tests; merged as `106585b`. |
 | Issue #25 / PR #27 | Honest `unclassified` GitHub squash references; merged as `457d1af`. |
-| Pages deployment | Workflow run `39123292582` passed; site published successfully. |
+| Pages deployment | Workflow run `39126827123` passed; site published successfully. |
 
 ## Next
 
@@ -73,7 +73,9 @@
 - Static site smoke check — passed with five standalone reports and twenty local
   landing-page links.
 - Local HTTP smoke check — passed for the landing page, report files, and demo.
-- Pages workflow run `39123292582` — passed Configure Pages, upload, and deploy.
+- Pages workflow run `39126827123` — passed Configure Pages, upload, and deploy.
+- Docker workflow run `39126827120` — passed image build, Git check, offline
+  tests, and version check.
 - `git diff --check` — passed after issue #25.
 
 Update this handoff at the end of each issue lifecycle with only the current

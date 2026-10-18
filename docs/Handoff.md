@@ -8,8 +8,8 @@
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
 - Work in progress: issue #24 on `fix/24-docs-and-input-tests` corrects stale
   claims and adds direct `internal/input` contract tests.
-- Issue #25 is planned for the narrow `unclassified` GitHub squash-reference
-  enhancement after issue #24.
+- Work in progress: issue #25 on `feat/25-unclassified-squash-references`
+  preserves narrow GitHub squash suffixes as honest `unclassified` references.
 
 ## Completed lifecycle
 
@@ -25,8 +25,7 @@
 
 1. Finish issue #24 with focused parser tests, documentation checks, and the
    issue PR lifecycle.
-2. Implement or reject issue #25 after reviewing the `unclassified` reference
-   behavior and regenerated self-report.
+2. Finish the issue #25 PR lifecycle and review the regenerated self-report.
 3. Prepare the final demo/submission handoff. Do not start stretch work without
    explicit approval.
 
@@ -43,7 +42,7 @@
   safe or unsafe and not a measure of ownership, runtime impact, dependencies,
   or business criticality.
 - Reference parsing never queries GitHub. Explicit issue/PR forms are
-  classified; the planned parenthesized squash suffix will remain unclassified.
+  classified; parenthesized squash suffixes are labeled `unclassified`.
 
 ## Gotchas
 

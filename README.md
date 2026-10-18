@@ -2,10 +2,11 @@
 
 whyfence is a local, git-only CLI that helps explain why code exists before it
 is deleted or rewritten. Given a file range, it produces cited evidence from
-local Git history, including related commits, supported issue/PR references, and
-tests changed alongside the code, plus an evidence-backed risk flag. Given a unified diff,
-it validates and summarizes the source, changed-file count, and hunk count; diff
-history evidence and risk are not implemented yet.
+local Git history, including related commits, supported issue/PR references,
+unclassified GitHub squash suffixes, and tests changed alongside the code, plus
+an evidence-backed risk flag. Given a unified diff, it validates and summarizes
+the source, changed-file count, and hunk count; diff history evidence and risk
+are not implemented yet.
 
 The core is designed to be deterministic and fully offline. Any LLM summary is
 optional and disabled in tests.

@@ -10,7 +10,8 @@ deterministic non-zero errors.
 For a range, `runWithInput` calls `input.ParseRange`. The validated request then
 calls `evidence.RecoverLineRange`, which resolves the repository root, runs
 local `git log -L`, parses and de-duplicates full-hash/subject citations, and
-attaches supported references from each subject. The collector runs a root-safe
+attaches supported or explicitly `unclassified` references from each subject.
+The collector runs a root-safe
 local `git diff-tree` query for each recovered commit, filters repository-
 relative paths whose basenames end in `_test.go`, sorts them, and attaches them
 to the originating citation. The complete citation set goes to `risk.Evaluate`.

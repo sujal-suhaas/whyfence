@@ -2,12 +2,12 @@
 
 whyfence is a solo, local, git-only CLI for the Developer Tools & Open Source
 track. The core is deterministic, cited, and fully offline; LLM summaries are
-optional and disabled in tests. Deadline: 20 Oct, 11:59 PM IST; about 35–45
-working hours remain.
+optional and disabled in tests. Deadline: 20 Oct, 11:59 PM IST.
 
 ## Deliverables — do not start a later item until the earlier one works and is tested
 
-1. CLI core: file range or diff in; cited local-git evidence and risk flag out.
+1. CLI core: file range in for cited local-Git evidence and risk; diff in for a
+   validated summary because diff evidence/risk is not implemented yet.
 2. Offline tests, including fixture git repos with known reasons, reporting
    `recovered N of M`, plus Docker rebuild checks.
 3. Self-contained static HTML report output from the CLI; no server.

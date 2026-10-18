@@ -1,259 +1,79 @@
 # Handoff
 
-## Done
+## Current status
 
-- Merged issue #2 through PR #10 as squash commit `73a2f614`.
-- Pulled `main` and verified a clean no-cache Docker rebuild, Git in the image,
-  offline container tests, and the offline version flag after the merge.
-- Merged issue #3 through PR #11 as squash commit `0e83c7e0`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker and offline fixture checks after the
-  merge.
-- Merged issue #4 through PR #12 as squash commit `bddf6615`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker, fixture, and accuracy checks after the
-  merge.
-- Merged issue #5 through PR #13 as squash commit `32ae790d`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker and CLI contract checks after the
-  merge.
-- Started issue #6 on `feat/6-line-range-evidence` with production Git
-  line-range recovery, cited commit output, and an accuracy case.
-- Merged issue #6 through PR #14 as squash commit `b1abebc8`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker, line-range, and accuracy checks after
-  the merge.
-- Started issue #7 on `feat/7-reference-evidence` with explicit local issue/PR
-  extraction attached to originating line-range citations.
-- Merged issue #7 through PR #15 as squash commit `6bf4cc84`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker, reference, and accuracy checks after
-  the merge.
-- Started issue #8 on `feat/8-changed-tests` with root-safe same-commit test-path
-  recovery, matching/non-matching fixtures, and CLI test citations.
-- Merged issue #8 through PR #16 as squash commit `aba23165`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker, changed-test, and accuracy checks after
-  the merge.
-- Started issue #9 on `feat/9-risk-flag` with evidence-backed low, medium, and
-  high risk evaluation and generated risk fixtures.
-- Merged issue #9 through PR #17 as squash commit `80ac53dc`; its remote branch
-  was deleted.
-- Pulled `main` and reran the post-merge Docker build, full suite, risk tests,
-  accuracy, and CLI contract checks.
-- Started issue #18 on `feat/18-static-html-report` for deterministic standalone
-  HTML report output.
-- Merged issue #18 through PR #19 as squash commit `bad17659`; its remote branch
-  was deleted.
-- Pulled `main` and reran the full Docker, report, accuracy, version, and help
-  checks after the merge.
-- Started issue #20 on `feat/20-static-landing-page` for the plain static
-  GitHub Pages landing page and checked-in report gallery.
-- Merged issue #22 through PR #23 as squash commit `7075929`; its remote branch
-  was deleted.
-- Enabled workflow-backed GitHub Pages through the authorized repository API,
-  reran the deployment workflow successfully, and verified the published site.
-- Pulled `main` and reran the post-merge Docker rebuild, full suite, and Git
-  availability checks after the Pages fix.
+- `main` was clean and synchronized at `a71ca47` when issue #24 started.
+- Deliverables 1–4 are implemented: deterministic CLI core, offline fixture
+  regression checks, standalone HTML reports, and the static Pages site.
+- The published site is <https://sujal-suhaas.github.io/whyfence/>.
+- Work in progress: issue #24 on `fix/24-docs-and-input-tests` corrects stale
+  claims and adds direct `internal/input` contract tests.
+- Issue #25 is planned for the narrow `unclassified` GitHub squash-reference
+  enhancement after issue #24.
 
-## In progress
+## Completed lifecycle
 
-- Issues #2 and #3 are merged and verified on `main`.
-- Issue #4 is merged and verified on `main`.
-- Issue #5 is merged and verified on `main`.
-- Issue #6 is merged and verified on `main`.
-- Issue #7 is merged and verified on `main`.
-- Issue #8 is merged and verified on `main`.
-- Issue #9 is merged and verified on `main`.
-- Issue #18 is merged and verified on `main`.
-- Issue #20 is merged and verified on `main`.
-- Issue #22 is resolved and verified on `main`.
-- The worktree was clean at the start of issue #18; no unrelated changes are
-  included in this feature.
+| Scope | Result |
+| --- | --- |
+| Issues #2–#9 | Core, fixtures, CLI contract, range evidence, references, changed tests, and risk merged and verified on `main`. |
+| Issue #18 / PR #19 | Deterministic standalone HTML reports; merged as `bad17659`. |
+| Issue #20 / PR #21 | Static landing page, five report snapshots, and Pages workflow; merged as `789559f`. |
+| Issue #22 / PR #23 | Pages enablement fix; merged as `7075929`. |
+| Pages deployment | Workflow run `39123292582` passed; site published successfully. |
 
 ## Next
 
-- All four planned deliverables are implemented and verified. Next: prepare the
-  final demo/submission handoff; do not start stretch work without explicit
-  approval.
+1. Finish issue #24 with focused parser tests, documentation checks, and the
+   issue PR lifecycle.
+2. Implement or reject issue #25 after reviewing the `unclassified` reference
+   behavior and regenerated self-report.
+3. Prepare the final demo/submission handoff. Do not start stretch work without
+   explicit approval.
+
+## Truth boundaries
+
+- Range input recovers cited local Git history, supported references, same-commit
+  changed Go test paths, and an evidence-backed removal-risk signal.
+- Diff input validates and summarizes source, files, and hunks only. It does not
+  recover history or emit risk.
+- The `recovered N of M` output is generated-fixture regression coverage with
+  answers defined by the test fixtures. It is not a real-repository accuracy
+  percentage or an external benchmark.
+- Risk is a conservative evidence classification, not proof that removal is
+  safe or unsafe and not a measure of ownership, runtime impact, dependencies,
+  or business criticality.
+- Reference parsing never queries GitHub. Explicit issue/PR forms are
+  classified; the planned parenthesized squash suffix will remain unclassified.
 
 ## Gotchas
 
-- Docker builds need network access for `apt-get install git`; test containers
-  run with `--network=none`.
-- Docker Desktop may need to be started before local Docker verification.
-- The post-merge Docker checks run with `--network=none`; the image build needs
-  network access for `apt-get install git`.
-- README now documents the tested Go/Docker setup and report commands.
-- GitHub Pages required one-time repository-level enablement because the default
-  Actions token could not create the Pages site. The site is now configured for
-  workflow deployment; forks may still need Settings → Pages once.
+- Docker image builds need network access for `apt-get install git`; test
+  containers run with `--network=none`.
+- Docker Desktop may need to be started before local verification.
+- The Pages repository configuration needed one-time authorized enablement. The
+  workflow now uses `enablement: true`; forks may still need Settings → Pages.
+- `site/` is outside the Docker `COPY` list and is deployed separately by
+  `.github/workflows/pages.yml`.
+- No package is published. Use Go 1.23.0, Git, or Docker as documented in the
+  README.
 
-- Docker daemon was restarted locally during issue #9 verification because the
-  socket was unavailable; subsequent post-merge build, tests, version, and help
-  checks passed.
+## Verification evidence
 
-## Verification
+- Latest merged-main Docker rebuild before issue #24:
+  `docker build --no-cache -t whyfence:test .` — passed.
+- Latest merged-main offline core suite:
+  `docker run --rm --network=none whyfence:test go test ./... -count=1` — passed.
+- Latest merged-main Git check:
+  `docker run --rm --network=none whyfence:test git --version` — passed with
+  Git 2.39.5.
+- Latest merged-main offline CLI smoke checks:
+  `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`
+  and `--help` — passed; help listed `--report`.
+- Static site smoke check — passed with five standalone reports and twenty local
+  landing-page links.
+- Local HTTP smoke check — passed for the landing page, report files, and demo.
+- Pages workflow run `39123292582` — passed Configure Pages, upload, and deploy.
+- `git diff --check` — passed on the merged landing-page and Pages-fix changes.
 
-- `git pull --ff-only origin main`: passed after PR #10 merge.
-- `docker build --no-cache -t whyfence:test .`: passed on merged `main`.
-- `docker run --rm --network=none whyfence:test git --version`: passed.
-- `docker run --rm --network=none whyfence:test go test ./...`: passed.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`:
-  passed; output `whyfence 0.1.0-dev`.
-- `docker build --no-cache -t whyfence:test .` after PR #11 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
-  PR #11 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestFixtureBuilder -count=1` after PR #11 merge: passed.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
-  -v`: passed; output `recovered 3 of 3`.
-- Docker-mounted Go 1.23.0 `go test ./... -count=1`: passed.
-- `docker build --no-cache -t whyfence:test .` after PR #12 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
-  PR #12 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` after PR #12 merge: passed; output
-  `recovered 3 of 3`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --version` after PR #12 merge: passed; output `whyfence 0.1.0-dev`.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestCLIContract -count=1 -v`:
-  passed, including range, diff-file, diff-stdin, and deterministic errors.
-- `docker build --no-cache -t whyfence:test .` on issue #5: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1`: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestCLIContract -count=1 -v`: passed.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`:
-  passed; input flags were listed.
-- `git pull --ff-only origin main`: passed after PR #13 merge.
-- `docker build --no-cache -t whyfence:test .` after PR #13 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
-  PR #13 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestCLIContract -count=1 -v` after PR #13 merge: passed.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
-  after PR #13 merge: passed.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestLineRange -count=1 -v`:
-  passed; the production collector recovered both known commits and rejected
-  non-repository and invalid-boundary inputs deterministically.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
-  -v`: passed; output `recovered 4 of 4`.
-- `git pull --ff-only origin main`: passed after PR #14 merge.
-- `docker build --no-cache -t whyfence:test .` after PR #14 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
-  PR #14 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestLineRange -count=1 -v` after PR #14 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` after PR #14 merge: passed; output
-  `recovered 4 of 4`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --version` after PR #14 merge: passed; output `whyfence 0.1.0-dev`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
-  after PR #14 merge: passed.
-- Docker-mounted Go 1.23.0 `go test ./... -run
-  'Test(Issue|PR)Reference' -count=1 -v`: passed; issue and PR references were
-  recovered from their originating fixture commits.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestLineRange -count=1 -v` on
-  issue #7: passed with citation references attached.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
-  -v` on issue #7: passed; output `recovered 6 of 6`.
-- `git pull --ff-only origin main`: passed after PR #15 merge.
-- `docker build --no-cache -t whyfence:test .` after PR #15 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
-  PR #15 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestIssueReference -count=1 -v` after PR #15 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestPRReference -count=1 -v` after PR #15 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` after PR #15 merge: passed; output
-  `recovered 6 of 6`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --version` after PR #15 merge: passed; output `whyfence 0.1.0-dev`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
-  after PR #15 merge: passed.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestChangedTests -count=1 -v`:
-  passed; matching `_test.go` paths, root-commit paths, and code-only changes
-  were classified deterministically.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestLineRange -count=1 -v` on
-  issue #8: passed with same-commit test paths attached to citations.
-- Docker-mounted Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1
-  -v` on issue #8: passed; output `recovered 7 of 7`.
-- `git pull --ff-only origin main`: passed after PR #16 merge.
-- `docker build --no-cache -t whyfence:test .` after PR #16 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -count=1` after
-  PR #16 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestChangedTests -count=1 -v` after PR #16 merge: passed.
-- `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` after PR #16 merge: passed; output
-  `recovered 7 of 7`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --version` after PR #16 merge: passed; output `whyfence 0.1.0-dev`.
-- `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --help`
-  after PR #16 merge: passed.
-- Go 1.23.0 `go test ./... -run
-  'TestEvaluateRiskLevels|TestEvaluateDoesNotMutateCitations|TestRiskFixtureBuilder'
-  -count=1 -v`: passed.
-- Go 1.23.0 `go test ./... -run TestRecoveryAccuracy -count=1 -v`: passed;
-  output `recovered 12 of 12`.
-- Go 1.23.0 `go test ./... -count=1`: passed on issue #9.
-- Docker `docker build --no-cache -t whyfence:test .`: passed on issue #9.
-- Docker `docker run --rm --network=none whyfence:test git --version`: passed;
-  output `git version 2.39.5`.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`:
-  passed on issue #9.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v`: passed; output `recovered 12 of 12`.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  TestCLIContract -count=1 -v`: passed.
-- `git pull --ff-only origin main`: passed after PR #17 merge.
-- Docker `docker build --no-cache -t whyfence:test .` after PR #17 merge:
-  passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`
-  after PR #17 merge: passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  'TestEvaluateRiskLevels|TestEvaluateDoesNotMutateCitations|TestRiskFixtureBuilder'
-  -count=1 -v` after PR #17 merge: passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` after PR #17 merge: passed; output
-  `recovered 12 of 12`.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  TestCLIContract -count=1 -v` after PR #17 merge: passed.
-- Post-merge Docker `go run ./cmd/whyfence --version` and `--help` retries:
-  blocked by SIGBUS in the local container runtime, followed by sandbox I/O
-  failure; not claimed as passed.
-- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --version`: passed; output `whyfence 0.1.0-dev`.
-- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --help`: passed; input flags were listed.
-- `git pull --ff-only origin main`: passed after PR #19 merge.
-- Docker `docker build --no-cache -t whyfence:test .` after PR #19 merge:
-  passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`
-  after PR #19 merge: passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  'TestHTMLReport|TestDiffReportOmitsRisk|TestWriteAtomicOverwritesReport'
-  -count=1 -v` after PR #19 merge: passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  TestCLIReport -count=1 -v` after PR #19 merge: passed.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` after PR #19 merge: passed; output
-  `recovered 12 of 12`.
-- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --version` after PR #19 merge: passed; output `whyfence 0.1.0-dev`.
-- Docker `docker run --rm --network=none whyfence:test go run ./cmd/whyfence
-  --help` after PR #19 merge: passed; `--report` was listed.
-- The first post-merge landing-page workflow failed at Configure Pages with
-  `Resource not accessible by integration`; see `docs/Bug.md` and workflow run
-  `39122917936`.
-- Docker `docker build --no-cache -t whyfence:test .` after PR #23 merge:
-  passed.
-- Docker `docker run --rm --network=none whyfence:test git --version` after
-  PR #23 merge: passed; output `git version 2.39.5`.
-- Docker `docker run --rm --network=none whyfence:test go test ./... -count=1`
-  after PR #23 merge: passed.
-- Pages workflow run `39123292582`: passed Configure Pages, upload, and deploy.
-- Published site smoke fetch: passed at
-  `https://sujal-suhaas.github.io/whyfence/`.
+Update this handoff at the end of each issue lifecycle with only the current
+branch, next action, gotchas, and actual checks.

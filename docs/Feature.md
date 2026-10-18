@@ -42,15 +42,15 @@ verification, and status.
 
 ## Issue #4 — start recovered-N-of-M accuracy harness
 
-- **Goal:** Start a calculated accuracy harness with three known generated-fixture
-  cases and stable `recovered N of M` output.
+- **Goal:** Start a calculated generated-fixture regression harness with three
+  known cases and stable `recovered N of M` output.
 - **Approach:** Keep the harness resolver-agnostic; use test-only Git resolvers
   over generated history until production evidence recovery lands.
 - **Files touched:** `internal/accuracy/`, `docs/Architecture.md`,
   `docs/Flow.md`, `docs/Feature.md`, `docs/Handoff.md`.
 - **Verification:** Docker-mounted Go 1.23.0 ran `go test ./... -run
-  TestRecoveryAccuracy -count=1 -v` with `recovered 3 of 3`, and
-  `go test ./... -count=1` passed.
+  TestRecoveryAccuracy -count=1 -v` with all 3 generated fixture cases recovered,
+  and `go test ./... -count=1` passed.
 - **Status:** Merged via PR #12 as squash commit `bddf6615`.
 
 ## Issue #5 — define deterministic CLI contract
@@ -77,9 +77,9 @@ verification, and status.
 - **Files touched:** `cmd/whyfence/`, `internal/evidence/`,
   `internal/accuracy/`, `docs/Architecture.md`, `docs/Flow.md`,
   `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
-- **Verification:** Docker-mounted Go 1.23.0 passed `TestLineRange` and
-  `TestRecoveryAccuracy` with `recovered 4 of 4`; full-suite and offline Docker
-  checks passed before and after merge.
+- **Verification:** Docker-mounted Go 1.23.0 passed `TestLineRange` and the
+  generated-fixture regression harness with all 4 known cases recovered;
+  full-suite and offline Docker checks passed before and after merge.
 - **Status:** Merged via PR #14 as squash commit `b1abebc8`.
 
 ## Issue #7 — extract local issue and PR references
@@ -93,9 +93,9 @@ verification, and status.
   `internal/fixtures/`, `internal/accuracy/`, `docs/Architecture.md`,
   `docs/Flow.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
 - **Verification:** Docker-mounted Go 1.23.0 passed `TestIssueReference`,
-  `TestPRReference`, `TestLineRange`, and `TestRecoveryAccuracy` with
-  `recovered 6 of 6`; full-suite and offline Docker checks passed before and
-  after merge.
+  `TestPRReference`, `TestLineRange`, and the generated-fixture regression
+  harness with all 6 known cases recovered; full-suite and offline Docker checks
+  passed before and after merge.
 - **Status:** Merged via PR #15 as squash commit `6bf4cc84`.
 
 ## Issue #8 — detect tests changed alongside code
@@ -111,14 +111,15 @@ verification, and status.
   `internal/fixtures/`, `internal/accuracy/`, `docs/Architecture.md`,
   `docs/Flow.md`, `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
 - **Verification:** Docker-mounted Go 1.23.0 passed `TestChangedTests`,
-  `TestLineRange`, and `TestRecoveryAccuracy` with `recovered 7 of 7`; full-suite
-  and offline Docker checks passed before and after merge.
+  `TestLineRange`, and the generated-fixture regression harness with all 7 known
+  cases recovered; full-suite and offline Docker checks passed before and after
+  merge.
 - **Status:** Merged via PR #16 as squash commit `aba23165`.
 
 ## Issue #9 — add deterministic risk flag
 
 - **Goal:** Classify recovered range evidence as low, medium, or high removal
-  risk and finish the generated accuracy suite.
+  risk and finish the generated-fixture regression suite.
 - **Approach:** Add an order-independent `internal/risk` evaluator using changed
   test paths and explicit references as the two evidence signals; generate
   isolated low, medium, and high fixture histories plus an aggregate high case;
@@ -127,13 +128,14 @@ verification, and status.
   `internal/accuracy/`, `docs/Architecture.md`, `docs/Flow.md`,
   `docs/Decisions.md`, `docs/Feature.md`, `docs/Handoff.md`.
 - **Verification:** Go 1.23.0 and Docker passed risk unit tests, generated risk
-  fixtures, `TestRecoveryAccuracy` with `recovered 12 of 12`, the full suite,
-  CLI contract checks, no-cache image rebuild, Git availability, offline version,
-  and offline help checks before merge; post-merge full suite, risk tests,
-  accuracy, and CLI contract checks passed. The post-merge version/help rerun was
-  blocked by a local Docker SIGBUS followed by a sandbox I/O failure.
-- **Status:** Merged via PR #17 as squash commit `80ac53dc`; post-merge smoke
-  rerun has an environment blocker documented in `docs/Handoff.md`.
+  fixtures, and the generated-fixture regression suite with all 12 known cases
+  recovered, plus the full suite, CLI contract checks, no-cache image rebuild,
+  Git availability, offline version, and offline help checks before merge. The
+  first post-merge version/help retry hit a local Docker SIGBUS followed by a
+  sandbox I/O failure; a later retry passed both checks.
+- **Status:** Merged via PR #17 as squash commit `80ac53dc`; the initial local
+  post-merge smoke retry was blocked by the container runtime, but a later retry
+  passed and is recorded in `docs/Handoff.md`.
 
 ## Issue #18 — generate self-contained static HTML reports
 
@@ -175,3 +177,22 @@ verification, and status.
   tests, and Docker boundary remain intact.
 - **Status:** Merged via PR #21 as squash commit `789559f`; Pages deployment
   fix completed via PR #23 as squash commit `7075929`.
+
+## Issue #24 — align docs and add direct input parser coverage
+
+- **Goal:** Make project claims match the current range/diff behavior, remove
+  stale lifecycle notes, and protect the input parser with package-level tests.
+- **Approach:** Rewrite Architecture and Flow as current maps, distinguish
+  range evidence/risk from diff summary-only behavior in README and the landing
+  page, condense Handoff to current state, correct the fixture-regression
+  wording and historical verification note, remove the stale deadline estimate,
+  and add direct range/diff boundary tests under `internal/input/`.
+- **Files touched:** `AGENTS.md`, `README.md`, `site/index.html`,
+  `docs/Architecture.md`, `docs/Flow.md`, `docs/Feature.md`,
+  `docs/Handoff.md`, `docs/Decisions.md`, `internal/input/contract_test.go`.
+- **Verification:** Docker Go 1.23.0 passed the direct `internal/input` tests;
+  documentation smoke checks and `git diff --check` passed. Full Docker and
+  static-site checks remain part of the issue lifecycle.
+- **Rollback:** Revert the issue #24 commit; runtime behavior and the report
+  renderer remain unchanged.
+- **Status:** Implementation ready for review; PR lifecycle pending.

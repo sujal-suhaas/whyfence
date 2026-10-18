@@ -24,9 +24,9 @@ file/hunk summary. The core is deterministic and offline.
   line-range recovery; it is not a benchmark of accuracy on arbitrary public
   repositories.
 - `internal/evidence/` invokes local Git's line-range history traversal, parses
-  full-hash/subject citations, extracts supported local issue/PR references,
-  and identifies same-commit changed test paths. Evidence is range-only; diff
-  input does not query history.
+  full-hash/subject citations, extracts supported issue/PR references plus
+  honest `unclassified` GitHub squash suffixes, and identifies same-commit
+  changed test paths. Evidence is range-only; diff input does not query history.
 - `internal/risk/` reduces recovered range citations to a deterministic,
   evidence-backed low, medium, or high removal-risk level without mutating the
   evidence. It is not a safety, runtime-impact, ownership, or business-

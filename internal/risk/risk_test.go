@@ -17,6 +17,7 @@ func TestEvaluateRiskLevels(t *testing.T) {
 		{name: "no supporting signals", citations: []evidence.Citation{{Hash: "low"}}, want: Low},
 		{name: "tests only", citations: []evidence.Citation{{TestPaths: []string{"internal/worker_test.go"}}}, want: Medium},
 		{name: "references only", citations: []evidence.Citation{{References: []evidence.Reference{{Kind: evidence.IssueReference, Number: 41}}}}, want: Medium},
+		{name: "unclassified references only", citations: []evidence.Citation{{References: []evidence.Reference{{Kind: evidence.UnclassifiedReference, Number: 18}}}}, want: Medium},
 		{name: "tests and references", citations: []evidence.Citation{{TestPaths: []string{"internal/worker_test.go"}, References: []evidence.Reference{{Kind: evidence.PullRequestReference, Number: 42}}}}, want: High},
 		{name: "signals across citations", citations: []evidence.Citation{{TestPaths: []string{"internal/worker_test.go"}}, {References: []evidence.Reference{{Kind: evidence.IssueReference, Number: 41}}}}, want: High},
 	}

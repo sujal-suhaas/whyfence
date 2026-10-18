@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// ReferenceKind identifies the kind of tracker object named by a commit subject.
+// ReferenceKind identifies the kind of local reference named by a commit subject.
 type ReferenceKind string
 
 const (
@@ -22,9 +22,13 @@ const (
 	IssueReference ReferenceKind = "issue"
 	// PullRequestReference identifies a pull request reference.
 	PullRequestReference ReferenceKind = "pr"
+	// UnclassifiedReference identifies a GitHub-style numeric suffix whose
+	// tracker object kind cannot be established from the local subject alone.
+	UnclassifiedReference ReferenceKind = "unclassified"
 )
 
-// Reference identifies one explicit issue or pull request token in a subject.
+// Reference identifies one explicit tracker token or honest unclassified
+// numeric suffix in a commit subject.
 type Reference struct {
 	Kind   ReferenceKind
 	Number int
@@ -50,6 +54,7 @@ var referencePatterns = []referencePattern{
 	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\b(?:pr|pull request)\s*(?::\s*|\s+)#([0-9]+)\b`)},
 	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\bmerge\s+pull\s+request\s+#([0-9]+)\b`)},
 	{kind: PullRequestReference, pattern: regexp.MustCompile(`(?i)\bhttps://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/([0-9]+)\b`)},
+	{kind: UnclassifiedReference, pattern: regexp.MustCompile(`(?:^|[[:space:]])\(#([0-9]+)\)(?:$|[[:space:]])`)},
 }
 
 type referenceMatch struct {
@@ -57,8 +62,8 @@ type referenceMatch struct {
 	start     int
 }
 
-// ExtractReferences parses supported explicit issue and pull request forms from
-// one local commit subject without querying a remote tracker.
+// ExtractReferences parses supported explicit and unclassified forms from one
+// local commit subject without querying a remote tracker.
 func ExtractReferences(subject string) []Reference {
 	matches := make([]referenceMatch, 0)
 	for _, referencePattern := range referencePatterns {

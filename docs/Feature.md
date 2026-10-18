@@ -196,3 +196,25 @@ verification, and status.
 - **Rollback:** Revert the issue #24 commit; runtime behavior and the report
   renderer remain unchanged.
 - **Status:** Implementation ready for review; PR lifecycle pending.
+
+## Issue #25 — preserve unclassified GitHub squash references
+
+- **Goal:** Keep common GitHub-generated `Title (#N)` context without falsely
+  classifying the number as an issue or pull request.
+- **Approach:** Parse only a parenthesized numeric subject suffix as an
+  `unclassified` reference, keep bare and cross-repository numeric forms
+  ignored, preserve citation provenance/order/de-duplication, and let the
+  existing reference signal raise risk without changing its weighting.
+- **Files touched:** `internal/evidence/line_range.go`,
+  `internal/evidence/line_range_test.go`, `internal/risk/risk_test.go`,
+  `internal/report/`, `site/reports/*.html`, `site/index.html`, `README.md`,
+  `docs/Architecture.md`, `docs/Flow.md`, `docs/Decisions.md`,
+  `docs/Feature.md`, `docs/Handoff.md`.
+- **Verification:** Docker Go 1.23.0 passed focused evidence/risk/report tests,
+  the full suite, no-cache rebuild, Git/version/help checks, and the mounted
+  self-demo. The self-demo shows `unclassified #18` and high risk; regenerated
+  reports and static/HTTP site checks passed while diff behavior remains
+  unchanged.
+- **Rollback:** Revert the issue #25 commit; explicit issue/PR parsing and the
+  existing risk matrix remain intact.
+- **Status:** Implementation ready for review; PR lifecycle pending.

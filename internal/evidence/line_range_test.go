@@ -105,13 +105,14 @@ func TestPRReference(t *testing.T) {
 }
 
 func TestExtractReferences(t *testing.T) {
-	message := "issue #41, PR: #42, Merge pull request #44 from acme/topic, https://github.com/acme/tool/issues/43, https://github.com/acme/tool/pull/45, issue #41, #99"
+	message := "issue #41, PR: #42, Merge pull request #44 from acme/topic, https://github.com/acme/tool/issues/43, https://github.com/acme/tool/pull/45, issue #41, #99 — Title (#46)"
 	want := []Reference{
 		{Kind: IssueReference, Number: 41, Raw: "issue #41"},
 		{Kind: PullRequestReference, Number: 42, Raw: "PR: #42"},
 		{Kind: PullRequestReference, Number: 44, Raw: "Merge pull request #44"},
 		{Kind: IssueReference, Number: 43, Raw: "https://github.com/acme/tool/issues/43"},
 		{Kind: PullRequestReference, Number: 45, Raw: "https://github.com/acme/tool/pull/45"},
+		{Kind: UnclassifiedReference, Number: 46, Raw: "(#46)"},
 	}
 	if got := ExtractReferences(message); !reflect.DeepEqual(got, want) {
 		t.Fatalf("references = %#v, want %#v", got, want)

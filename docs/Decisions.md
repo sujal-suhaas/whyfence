@@ -273,3 +273,26 @@ without implying an external benchmark.
 **Rejected alternative:** Calling the count an accuracy score was rejected
 because the current suite does not sample independent repositories or establish
 a ground-truth corpus outside its own fixtures.
+
+## 2026-10-18 — preserve GitHub squash suffixes as unclassified references
+
+**Context:** GitHub's default squash subject commonly ends in `(#N)`. The local
+subject does not establish whether that number identifies an issue or a pull
+request, but dropping it makes the project's own reports lose a real change
+context signal and understates their conservative risk classification.
+
+**Decision:** Recognize only a parenthesized numeric suffix such as `(#18)` and
+emit it as `unclassified`. Keep bare `#18`, `owner/repo#18`, and other ambiguous
+forms ignored. Any reference, including an unclassified one, contributes to the
+existing evidence-backed reference signal; the output never relabels it as an
+issue or PR.
+
+**Why:** This captures the common generated form while preserving the local-only
+honesty boundary. Provenance stays attached to the source citation, ordering and
+de-duplication remain deterministic, and the existing risk matrix needs no new
+unsupported weighting.
+
+**Rejected alternatives:** Treating `(#N)` as an issue or pull request was
+rejected because the local subject cannot distinguish them. Treating every bare
+`#N` as a reference was rejected because it would create false positives in
+ordinary prose and ambiguous cross-repository subjects.

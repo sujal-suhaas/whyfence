@@ -8,7 +8,7 @@
   regression checks, standalone HTML reports, and the static Pages site.
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
 - Issues #24 and #25 are merged and verified on `main`.
-- Work in progress: issue #28 tightens the `unclassified` suffix boundary.
+- Issue #28 is resolved and verified on `main`.
 
 ## Completed lifecycle
 
@@ -20,12 +20,12 @@
 | Issue #22 / PR #23 | Pages enablement fix; merged as `7075929`. |
 | Issue #24 / PR #26 | Documentation alignment and direct input parser tests; merged as `106585b`. |
 | Issue #25 / PR #27 | Honest `unclassified` GitHub squash references; merged as `457d1af`. |
+| Issue #28 / PR #29 | Subject-end boundary fix for unclassified references; merged as `8f86cc8`. |
 | Pages deployment | Workflow run `39126827123` passed; site published successfully. |
 
 ## Next
 
-1. Finish issue #28's focused regression check and PR lifecycle.
-2. Prepare the final demo/submission handoff. Do not start stretch work without
+1. Prepare the final demo/submission handoff. Do not start stretch work without
    explicit approval.
 
 ## Truth boundaries
@@ -57,7 +57,7 @@
 
 ## Verification evidence
 
-- Latest merged-main Docker rebuild after issue #25:
+- Latest merged-main Docker rebuild after issue #28:
   `docker build --no-cache -t whyfence:test .` — passed.
 - Latest merged-main offline core suite:
   `docker run --rm --network=none whyfence:test go test ./... -count=1` — passed.
@@ -67,19 +67,22 @@
 - Latest merged-main offline CLI smoke checks:
   `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`
   and `--help` — passed; help listed `--report`.
-- Mounted self-demo after issue #25:
+- Mounted self-demo after issue #28:
   `docker run --rm --network=none -v "$PWD:/src" -w /src whyfence:test go run
   ./cmd/whyfence --range cmd/whyfence/main.go:26-32` — passed; output included
   `unclassified #18` and `risk: high`.
 - Focused evidence/risk/report tests after issue #25 — passed, including
   unclassified-reference parsing and risk behavior.
+- Focused suffix-boundary test after issue #28 — passed; `Title (#46) trailing`
+  remains unclassified-reference free.
 - Static site smoke check — passed with five standalone reports and twenty local
   landing-page links.
 - Local HTTP smoke check — passed for the landing page, report files, and demo.
 - Pages workflow run `39126827123` — passed Configure Pages, upload, and deploy.
 - Docker workflow run `39126827120` — passed image build, Git check, offline
   tests, and version check.
-- `git diff --check` — passed after issue #25.
+- PR #29 Docker CI and post-merge Docker checks — passed.
+- `git diff --check` — passed after issue #28.
 
 Update this handoff at the end of each issue lifecycle with only the current
 branch, next action, gotchas, and actual checks.

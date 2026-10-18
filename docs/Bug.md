@@ -35,8 +35,9 @@ verification, rollback, and status.
   `Title (#46) trailing`.
 - **Files touched:** `internal/evidence/line_range.go`,
   `internal/evidence/line_range_test.go`, `docs/Bug.md`.
-- **Verification:** Focused `TestExtractReferences` passed; full offline/Docker
-  checks and the issue PR lifecycle remain required.
+- **Verification:** Focused `TestExtractReferences`, full offline suite,
+  no-cache Docker rebuild, Git check, mounted self-demo, PR #29 CI, and
+  post-merge checks all passed.
 - **Rollback:** Revert the issue #28 fix commit; issue #25's broader boundary
   behavior is restored.
-- **Status:** Fix in progress.
+- **Status:** Resolved via PR #29 as squash commit `8f86cc8`.

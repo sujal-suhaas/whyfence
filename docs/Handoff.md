@@ -2,15 +2,15 @@
 
 ## Current status
 
-- `main` is clean and synchronized with `origin/main` after the issue #25
+- `main` is clean and synchronized with `origin/main` after the issue #30
   handoff.
 - Deliverables 1–4 are implemented: deterministic CLI core, offline fixture
   regression checks, standalone HTML reports, and the static Pages site.
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
 - Issues #24 and #25 are merged and verified on `main`.
 - Issue #28 is resolved and verified on `main`.
-- Clean-Linux reproducibility work is implemented on
-  `chore/clean-linux-rebuild` in commit `3c4d360`.
+- Issue #30 / PR #31 is merged and verified on `main` as squash commit
+  `536598a`.
 
 ## Completed lifecycle
 
@@ -23,6 +23,7 @@
 | Issue #24 / PR #26 | Documentation alignment and direct input parser tests; merged as `106585b`. |
 | Issue #25 / PR #27 | Honest `unclassified` GitHub squash references; merged as `457d1af`. |
 | Issue #28 / PR #29 | Subject-end boundary fix for unclassified references; merged as `8f86cc8`. |
+| Issue #30 / PR #31 | Clean-Linux reproducible build, test, and runnable Docker image; merged as `536598a`. |
 | Pages deployment | Workflow run `39126827123` passed; site published successfully. |
 
 ## Next
@@ -58,25 +59,22 @@
   README.
 - The project has no third-party Go modules; `go.mod` is the complete dependency
   lock state and no `go.sum` is required.
-- Docker was installed in the sandbox and the daemon started with `vfs` storage
-  and bridge/iptables disabled. `docker version` passed, but nested container
-  creation is blocked by the sandbox kernel with `operation not permitted`.
+- Docker Desktop must be running for local Docker verification. The final
+  merged-main verification passed with Docker Desktop's Linux engine; an
+  earlier nested sandbox attempt was blocked before container execution and is
+  not the current verification result.
 
 ## Verification evidence
 
-- Latest merged-main Docker rebuild after issue #28:
+- Latest merged-main Docker rebuild after issue #30:
   `docker build --no-cache -t whyfence:test .` — passed.
-- Latest merged-main offline core suite:
+- Latest merged-main offline core suite inside the rebuilt image:
   `docker run --rm --network=none whyfence:test go test ./... -count=1` — passed.
-- Latest merged-main Git check:
-  `docker run --rm --network=none whyfence:test git --version` — passed with
-  Git 2.39.5.
-- Latest merged-main offline CLI smoke checks:
-  `docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version`
-  and `--help` — passed; help listed `--report`.
-- Mounted self-demo after issue #28:
-  `docker run --rm --network=none -v "$PWD:/src" -w /src whyfence:test go run
-  ./cmd/whyfence --range cmd/whyfence/main.go:26-32` — passed; output included
+- Latest merged-main static Go checks inside the rebuilt image: `go vet ./...`
+  and `go list -mod=readonly ./...` — passed.
+- Latest merged-main offline CLI smoke checks: default help, compiled
+  `whyfence --version`, and a mounted self-demo using
+  `whyfence --range cmd/whyfence/main.go:26-32` — passed; output included
   `unclassified #18` and `risk: high`.
 - Focused evidence/risk/report tests after issue #25 — passed, including
   unclassified-reference parsing and risk behavior.
@@ -89,14 +87,13 @@
 - Docker workflow run `39126827120` — passed image build, Git check, offline
   tests, and version check.
 - PR #29 Docker CI and post-merge Docker checks — passed.
+- PR #31 Docker CI and post-merge Docker checks — passed.
 - `git diff --check` — passed after issue #28.
 - Clean-Linux local checks completed on this branch: `go vet ./...`,
   `go test ./...`, `go list -mod=readonly ./...`, local binary build/version/help/
   range run, Dockerfile/.dockerignore audit, and absolute-path/secrets audit.
-- Docker build/run was attempted locally after installation. Both the project
-  build and `docker run hello-world` failed before container execution with
-  `Error creating mount namespace before pivot: operation not permitted`; do
-  not claim those as passed in this nested sandbox.
+- The final post-merge Docker build and all required container checks passed on
+  the host Docker Desktop Linux engine.
 
 Update this handoff at the end of each issue lifecycle with only the current
 branch, next action, gotchas, and actual checks.

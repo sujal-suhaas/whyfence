@@ -236,10 +236,11 @@ verification, and status.
 - **Verification:** `go vet ./...`, `go test ./...`, `go list -mod=readonly ./...`,
   local compiled-binary version/help/range checks, Dockerfile/.dockerignore
   static checks, `git diff --check`, and absolute-path/secrets checks passed.
-  Docker client/server installation and `docker version` passed, but Docker
-  build/run was blocked before executing the Dockerfile by the sandbox error
+  Docker CI and post-merge Docker verification passed: the pinned image built,
+  ran the offline test suite, and executed the compiled CLI. An earlier nested
+  sandbox attempt was blocked before container execution by
   `Error creating mount namespace before pivot: operation not permitted`.
-  The same error reproduced with `hello-world`.
 - **Rollback:** Revert the reproducibility commit; CLI analysis behavior and
   static-site content remain unchanged.
-- **Status:** Implemented and committed locally.
+- **Status:** Merged via PR #31 as squash commit `536598a`; Docker CI and
+  post-merge Docker checks passed.

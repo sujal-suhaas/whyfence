@@ -1,0 +1,11 @@
+.git
+.github
+docs
+site
+*.md
+.env
+.env.*
+bin
+build
+dist
+coverage

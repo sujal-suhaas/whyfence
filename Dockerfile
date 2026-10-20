@@ -9,6 +9,7 @@ COPY go.mod ./
 COPY cmd ./cmd
 COPY internal ./internal
 
-RUN go test ./...
+RUN go test ./... -count=1 \
+    && go build -trimpath -o /usr/local/bin/whyfence ./cmd/whyfence
 
-CMD ["go", "test", "./..."]
+CMD ["whyfence", "--help"]

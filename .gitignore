@@ -21,6 +21,7 @@ node_modules/
 npm-debug.log*
 
 # Build and coverage output
+/bin/
 build/
 dist/
 coverage/

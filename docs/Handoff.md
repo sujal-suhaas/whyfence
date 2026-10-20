@@ -9,6 +9,8 @@
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
 - Issues #24 and #25 are merged and verified on `main`.
 - Issue #28 is resolved and verified on `main`.
+- Clean-Linux reproducibility work is in progress on
+  `chore/clean-linux-rebuild`.
 
 ## Completed lifecycle
 
@@ -25,7 +27,8 @@
 
 ## Next
 
-1. Prepare the final demo/submission handoff. Do not start stretch work without
+1. Finish the clean-Linux build/test/run verification and commit.
+2. Prepare the final demo/submission handoff. Do not start stretch work without
    explicit approval.
 
 ## Truth boundaries
@@ -54,6 +57,10 @@
   `.github/workflows/pages.yml`.
 - No package is published. Use Go 1.23.0, Git, or Docker as documented in the
   README.
+- The project has no third-party Go modules; `go.mod` is the complete dependency
+  lock state and no `go.sum` is required.
+- Docker is not installed or available in the current shell, so the Docker
+  build/run commands were statically audited but not executed locally.
 
 ## Verification evidence
 
@@ -83,6 +90,11 @@
   tests, and version check.
 - PR #29 Docker CI and post-merge Docker checks — passed.
 - `git diff --check` — passed after issue #28.
+- Clean-Linux local checks completed on this branch: `go vet ./...`,
+  `go test ./...`, `go list -mod=readonly ./...`, local binary build/version/help/
+  range run, Dockerfile/.dockerignore audit, and absolute-path/secrets audit.
+- Docker build/run remains unexecuted locally because `docker` is unavailable in
+  this shell; do not claim that local Docker check as passed.
 
 Update this handoff at the end of each issue lifecycle with only the current
 branch, next action, gotchas, and actual checks.

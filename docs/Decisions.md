@@ -296,3 +296,28 @@ unsupported weighting.
 rejected because the local subject cannot distinguish them. Treating every bare
 `#N` as a reference was rejected because it would create false positives in
 ordinary prose and ambiguous cross-repository subjects.
+
+## 2026-10-20 — keep the clean-Linux build standard-library-only
+
+**Context:** The project must rebuild from a clean Linux checkout without
+network-sensitive dependency resolution. The implementation already uses only
+the Go standard library, but the Dockerfile only ran tests and did not produce a
+default runnable CLI image.
+
+**Decision:** Treat `go.mod` as the complete dependency lock state because there
+are no third-party modules and therefore no `go.sum` checksums to resolve. Keep
+the Go runtime pinned at 1.23.0 in `go.mod` and the Docker base image. Make the
+Dockerfile run the offline test command during image construction, compile
+`/usr/local/bin/whyfence`, and default to `whyfence --help`. Exclude Git metadata,
+docs, and `site/` from the Docker context with `.dockerignore`.
+
+**Why:** This keeps the clean build small, deterministic, and offline after the
+base image and Git package are available. The same image can verify tests and
+run the actual CLI binary, while the static Pages site remains outside the core
+build boundary.
+
+**Rejected alternatives:** Adding an empty or fabricated `go.sum` was rejected
+because no external modules exist. A package manager or third-party dependency
+was rejected because it would add an unnecessary lock/download surface. Keeping
+the image test-only was rejected because it would not satisfy the build-and-run
+requirement.

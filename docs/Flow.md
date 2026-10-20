@@ -28,8 +28,9 @@ The smoke and contract tests call the same CLI functions directly. Fixture
 tests create temporary repositories with fixed identities and dates. The
 generated-fixture regression harness compares known expected reasons and emits
 `recovered N of M` as a regression count, not a real-repository accuracy score.
-Docker builds the module, runs `go test ./...`, and CI repeats those core checks
-with networking disabled.
+Docker builds the module, runs `go test ./... -count=1`, compiles the CLI binary,
+and defaults to its help output; CI repeats the test and version checks with
+networking disabled.
 
 ## Current static-site flow
 

@@ -218,3 +218,28 @@ verification, and status.
 - **Rollback:** Revert the issue #25 commit; explicit issue/PR parsing and the
   existing risk matrix remain intact.
 - **Status:** Merged via PR #27 as squash commit `457d1af`.
+
+## Clean-Linux reproducibility — build, test, and run contract
+
+- **Goal:** Make a clean Linux checkout rebuildable with a pinned Go runtime,
+  explicit dependency state, one test command, a runnable Docker image, and no
+  machine-specific paths or secrets.
+- **Approach:** Keep the standard-library-only `go.mod` as the complete
+  dependency lock state, add `.dockerignore`, compile the CLI in the pinned
+  Docker image, default the image to `whyfence --help`, document local binary
+  and Docker commands, and make `.env.example` explicitly empty because no
+  runtime settings are required.
+- **Files touched:** `Dockerfile`, `.dockerignore`, `.gitignore`,
+  `.env.example`, `.github/workflows/docker-test.yml`, `README.md`,
+  `docs/Architecture.md`, `docs/Decisions.md`, `docs/Feature.md`,
+  `docs/Flow.md`, `docs/Handoff.md`.
+- **Verification:** `go vet ./...`, `go test ./...`, `go list -mod=readonly ./...`,
+  local compiled-binary version/help/range checks, Dockerfile/.dockerignore
+  static checks, `git diff --check`, and absolute-path/secrets checks passed.
+  Docker client/server installation and `docker version` passed, but Docker
+  build/run was blocked before executing the Dockerfile by the sandbox error
+  `Error creating mount namespace before pivot: operation not permitted`.
+  The same error reproduced with `hello-world`.
+- **Rollback:** Revert the reproducibility commit; CLI analysis behavior and
+  static-site content remain unchanged.
+- **Status:** Implemented and committed locally.

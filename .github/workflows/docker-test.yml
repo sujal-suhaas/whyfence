@@ -24,3 +24,6 @@ jobs:
 
       - name: Verify version flag
         run: docker run --rm --network=none whyfence:test go run ./cmd/whyfence --version
+
+      - name: Verify compiled CLI
+        run: docker run --rm --network=none whyfence:test whyfence --version

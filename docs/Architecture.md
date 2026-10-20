@@ -42,10 +42,12 @@ file/hunk summary. The core is deterministic and offline.
   landing page, terminal demo, provenance notes, and checked-in report
   snapshots. `.github/workflows/pages.yml` checks out the repository and
   uploads `site/` directly to GitHub Pages; it does not build or run the CLI.
-- `Dockerfile` is the reproducible core-test boundary. It pins Go, installs Git,
-  copies only `go.mod`, `cmd/`, and `internal/`, and does not include `site/`.
-  `.github/workflows/docker-test.yml` repeats the core checks with container
-  networking disabled.
+- `Dockerfile` is the reproducible core build/run boundary. It pins Go, installs
+  Git, copies only `go.mod`, `cmd/`, and `internal/`, runs the offline test suite,
+  builds `/usr/local/bin/whyfence`, and defaults to `whyfence --help`; it does
+  not include `site/`. `.dockerignore` keeps Git metadata, docs, and site assets
+  out of the build context. `.github/workflows/docker-test.yml` repeats the core
+  checks with container networking disabled.
 
 ## System boundaries
 

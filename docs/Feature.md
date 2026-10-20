@@ -236,8 +236,10 @@ verification, and status.
 - **Verification:** `go vet ./...`, `go test ./...`, `go list -mod=readonly ./...`,
   local compiled-binary version/help/range checks, Dockerfile/.dockerignore
   static checks, `git diff --check`, and absolute-path/secrets checks passed.
-  Docker build/run was not executed in this shell because the `docker` command
-  is unavailable; the exact Docker commands are documented and covered by CI.
+  Docker client/server installation and `docker version` passed, but Docker
+  build/run was blocked before executing the Dockerfile by the sandbox error
+  `Error creating mount namespace before pivot: operation not permitted`.
+  The same error reproduced with `hello-world`.
 - **Rollback:** Revert the reproducibility commit; CLI analysis behavior and
   static-site content remain unchanged.
 - **Status:** Implemented and committed locally.

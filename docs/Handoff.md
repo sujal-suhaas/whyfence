@@ -58,8 +58,9 @@
   README.
 - The project has no third-party Go modules; `go.mod` is the complete dependency
   lock state and no `go.sum` is required.
-- Docker is not installed or available in the current shell, so the Docker
-  build/run commands were statically audited but not executed locally.
+- Docker was installed in the sandbox and the daemon started with `vfs` storage
+  and bridge/iptables disabled. `docker version` passed, but nested container
+  creation is blocked by the sandbox kernel with `operation not permitted`.
 
 ## Verification evidence
 
@@ -92,8 +93,10 @@
 - Clean-Linux local checks completed on this branch: `go vet ./...`,
   `go test ./...`, `go list -mod=readonly ./...`, local binary build/version/help/
   range run, Dockerfile/.dockerignore audit, and absolute-path/secrets audit.
-- Docker build/run remains unexecuted locally because `docker` is unavailable in
-  this shell; do not claim that local Docker check as passed.
+- Docker build/run was attempted locally after installation. Both the project
+  build and `docker run hello-world` failed before container execution with
+  `Error creating mount namespace before pivot: operation not permitted`; do
+  not claim those as passed in this nested sandbox.
 
 Update this handoff at the end of each issue lifecycle with only the current
 branch, next action, gotchas, and actual checks.

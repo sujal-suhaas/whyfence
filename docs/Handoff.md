@@ -9,8 +9,8 @@
 - The published site is <https://sujal-suhaas.github.io/whyfence/>.
 - Issues #24 and #25 are merged and verified on `main`.
 - Issue #28 is resolved and verified on `main`.
-- Clean-Linux reproducibility work is in progress on
-  `chore/clean-linux-rebuild`.
+- Clean-Linux reproducibility work is implemented on
+  `chore/clean-linux-rebuild` in commit `3c4d360`.
 
 ## Completed lifecycle
 
@@ -27,8 +27,7 @@
 
 ## Next
 
-1. Finish the clean-Linux build/test/run verification and commit.
-2. Prepare the final demo/submission handoff. Do not start stretch work without
+1. Prepare the final demo/submission handoff. Do not start stretch work without
    explicit approval.
 
 ## Truth boundaries
